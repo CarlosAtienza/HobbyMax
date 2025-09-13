@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { styles } from "@/styles/auth.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -13,7 +14,7 @@ export default function Login() {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("/auth/login", {
         username, 
         password,
       });
@@ -29,15 +30,15 @@ export default function Login() {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#000000', '#0b1f5f']} style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Username"
         value={username}
         autoCapitalize="none"
-        keyboardType="email-address"
+        placeholderTextColor="#ccc"
         onChangeText={setUsername}
       />
 
@@ -46,6 +47,7 @@ export default function Login() {
         placeholder="Password"
         value={password}
         secureTextEntry
+        placeholderTextColor="#ccc"
         onChangeText={setPassword}
       />
 
@@ -54,18 +56,15 @@ export default function Login() {
         onPress={handleLogin}
         disabled={loading}
       >
-        <Text style={styles.buttonText}>
-          {loading ? "Signing in..." : "Sign in"}
-        </Text>
+        <Text style={styles.buttonText}>{loading ? "Signing in..." : "Log In"}</Text>
       </TouchableOpacity>
 
-       <TouchableOpacity
-        style={[styles.button, { backgroundColor: "#888", marginTop: 10 }]}
-        onPress={() => router.push("./(auth)/register")}
-      >
-        <Text style={styles.buttonText}>Create an account</Text>
-      </TouchableOpacity>
-
-    </View>
+      <View style={styles.registerContainer}>
+        <Text style={styles.registerText}>Don't have an account? </Text>
+        <TouchableOpacity onPress={() => router.push("/(auth)/register")}>
+          <Text style={styles.registerLink}>Register here</Text>
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
   );
 }

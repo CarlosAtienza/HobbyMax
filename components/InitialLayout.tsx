@@ -1,6 +1,6 @@
 
+import { useAuthStore } from "@/stores/authStore";
 import { Stack, useRouter, useSegments } from "expo-router";
-import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from "react";
 
 export default function InitialLayout() {
@@ -9,22 +9,17 @@ export default function InitialLayout() {
     const segments = useSegments();
     const router = useRouter();
     const [isLoaded, setIsLoaded] = useState(false);
-    const [isSignedIn, setIsSignedIn] = useState(false);
+   
+
+    const { isSignedIn, checkToken } = useAuthStore();
 
     useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const token = await SecureStore.getItemAsync("token");
-                setIsSignedIn(!!token);
-            } catch (error) {
-                console.error("Error checking auth token:", error);
-                setIsSignedIn(false);
-            } finally {
+            const init = async () => {
+                await checkToken();
                 setIsLoaded(true);
-            }
-        };
-        checkAuth();
-    }, [])
+                };
+            init();
+        }, []);
 
 
     useEffect(() => {
@@ -35,6 +30,7 @@ export default function InitialLayout() {
             router.replace("/(auth)/register");
         }
         else if (isSignedIn && inAuthScreen) {
+            console.log("Redirecting to main app");
             router.replace("/(tabs)");
         }
 

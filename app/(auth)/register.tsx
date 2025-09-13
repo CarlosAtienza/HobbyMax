@@ -1,8 +1,11 @@
+import { axiosInstance } from "@/lib/axios";
 import { styles } from "@/styles/auth.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+
 
 export default function Register() {
   const router = useRouter();
@@ -11,7 +14,10 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
+  
 
+
+  //TODO: Handle profile pictures later
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match");
@@ -24,23 +30,18 @@ export default function Register() {
       const formData = new FormData();
       formData.append("user", JSON.stringify({ username, email, password }));
 
-      const response = await fetch(process.env.BASE_URL + "/auth/register", {
-        method: 'POST',
+     
+      const response = await axiosInstance.post("/auth/register", formData, {
         headers: {
-          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData,
-    });
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
-      }
-      const responseData = await response.json();
+      await SecureStore.setItemAsync("token", response.data.token); 
+      console.log("Register success:", response.data.username);
 
-      await SecureStore.setItemAsync("token", responseData.data.token); 
-      console.log("Register success:", responseData.data);
       router.replace("../(tabs)");
+      
     } catch (error: any) {
       console.error("Register failed:", error.response?.data || error.message);
       Alert.alert("Register Failed", "Unable to create account");
@@ -50,6 +51,7 @@ export default function Register() {
   };
 
   return (
+    <LinearGradient colors={['#000000', '#0b1f5f']} style={styles.container}>
     <View style={styles.container}>
       <Text style={styles.title}>Register</Text>
 
@@ -103,5 +105,6 @@ export default function Register() {
         <Text style={styles.buttonText}>Back to Login</Text>
       </TouchableOpacity>
     </View>
+    </LinearGradient>
   );
 }
