@@ -1,10 +1,11 @@
+import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { styles } from "@/styles/auth.styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from "react";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity } from "react-native";
 
 
 export default function Register() {
@@ -51,8 +52,8 @@ export default function Register() {
   };
 
   return (
-    <LinearGradient colors={['#000000', '#0b1f5f']} style={styles.container}>
-    <View style={styles.container}>
+    <LinearGradient colors={[COLORS.black, COLORS.primary]} style={styles.container}>
+  
       <Text style={styles.title}>Register</Text>
 
       <TextInput
@@ -104,7 +105,7 @@ export default function Register() {
       >
         <Text style={styles.buttonText}>Back to Login</Text>
       </TouchableOpacity>
-    </View>
+    
     </LinearGradient>
   );
 }

@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { styles } from "@/styles/auth.styles";
 import { LinearGradient } from "expo-linear-gradient";
@@ -30,7 +31,7 @@ export default function Login() {
   };
 
   return (
-    <LinearGradient colors={['#000000', '#0b1f5f']} style={styles.container}>
+    <LinearGradient colors={[COLORS.black, COLORS.primary]} style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
       <TextInput
