@@ -1,6 +1,6 @@
 
 import { axiosInstance } from "@/lib/axios";
-import { HobbyResponseDTO } from "@/types/index";
+import { HobbyResponseDTO } from "@/models/api";
 import { create } from "zustand";
 
 interface HobbyState {

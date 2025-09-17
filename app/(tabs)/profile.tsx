@@ -3,30 +3,19 @@ import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React from 'react';
 import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { useHobbyStore } from '@/stores/hobbyStore';
 
 export default function Profile() {
   const router = useRouter();
   const setSignedIn = useAuthStore((state) => state.setSignedIn);
+  const { hobbies, fetchHobbies, clearHobbies } = useHobbyStore();
+
+  
 
 
-  const handleLogout = async () => {
-    try {
-      await SecureStore.deleteItemAsync('token');
-      setSignedIn(false);
-      router.replace('/(auth)/login'); 
-    } catch (error) {
-      console.error('Logout failed', error);
-      Alert.alert('Error', 'Unable to log out');
-    }
-  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-
-      {/* Logout button */}
-      <Button title="Log Out" onPress={handleLogout} />
-    </View>
+    
   );
 }
 

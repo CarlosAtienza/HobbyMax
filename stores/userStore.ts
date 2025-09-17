@@ -1,4 +1,4 @@
-import { UserResponseDTO } from "@/types/index";
+import { UserResponseDTO } from "@/models/api";
 import { create } from "zustand";
 
 interface UserState {
