@@ -4,42 +4,41 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   AuthResponseDTO,
   LoginRequest,
   RegisterBody
 } from '../../models/api';
 
+import { axiosInstance } from '../../lib/axios';
 
 
 
 
-  export const register = <TData = AxiosResponse<AuthResponseDTO>>(
-    registerBody: RegisterBody, options?: AxiosRequestConfig
- ): Promise<TData> => {const formData = new FormData();
+  export const register = (
+    registerBody: RegisterBody,
+ ) => {const formData = new FormData();
 formData.append(`user`, registerBody.user)
 if(registerBody.profilePhoto !== undefined) {
  formData.append(`profilePhoto`, registerBody.profilePhoto)
  }
 
-    return axios.post(
-      `/api/auth/register`,
-      formData,options
-    );
-  }
-export const login = <TData = AxiosResponse<AuthResponseDTO>>(
-    loginRequest: LoginRequest, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/auth/login`,
-      loginRequest,options
-    );
-  }
-export type RegisterResult = AxiosResponse<AuthResponseDTO>
-export type LoginResult = AxiosResponse<AuthResponseDTO>
+      return axiosInstance<AuthResponseDTO>(
+      {url: `/api/auth/register`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      );
+    }
+  export const login = (
+    loginRequest: LoginRequest,
+ ) => {
+      return axiosInstance<AuthResponseDTO>(
+      {url: `/api/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginRequest
+    },
+      );
+    }
+  export type RegisterResult = NonNullable<Awaited<ReturnType<typeof register>>>
+export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>

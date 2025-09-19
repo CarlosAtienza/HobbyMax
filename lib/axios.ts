@@ -1,7 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export const axiosInstance = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_BASE_URL,
-  
-});
-  
+export const axiosInstance = <TData = unknown>(
+  config: AxiosRequestConfig
+): Promise<AxiosResponse<TData>> => {
+  const instance = axios.create({
+    baseURL: process.env.EXPO_BASE_URL
+  });
+  return instance.request<TData>(config);
+};

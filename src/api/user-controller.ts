@@ -4,36 +4,34 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   UserRequestDTO,
   UserResponseDTO
 } from '../../models/api';
 
+import { axiosInstance } from '../../lib/axios';
 
 
 
 
-  export const getUser = <TData = AxiosResponse<UserResponseDTO>>(
-    id: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/api/users/${id}`,options
-    );
-  }
-export const updateUser = <TData = AxiosResponse<UserResponseDTO>>(
+  export const getUser = (
     id: number,
-    userRequestDTO: UserRequestDTO, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/api/users/${id}`,
-      userRequestDTO,options
-    );
-  }
-export type GetUserResult = AxiosResponse<UserResponseDTO>
-export type UpdateUserResult = AxiosResponse<UserResponseDTO>
+ ) => {
+      return axiosInstance<UserResponseDTO>(
+      {url: `/api/users/${id}`, method: 'GET'
+    },
+      );
+    }
+  export const updateUser = (
+    id: number,
+    userRequestDTO: UserRequestDTO,
+ ) => {
+      return axiosInstance<UserResponseDTO>(
+      {url: `/api/users/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: userRequestDTO
+    },
+      );
+    }
+  export type GetUserResult = NonNullable<Awaited<ReturnType<typeof getUser>>>
+export type UpdateUserResult = NonNullable<Awaited<ReturnType<typeof updateUser>>>

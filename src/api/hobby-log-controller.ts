@@ -4,43 +4,42 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   HobbyLogRequestDTO,
   HobbyLogResponseDTO
 } from '../../models/api';
 
+import { axiosInstance } from '../../lib/axios';
 
 
 
 
-  export const createLog = <TData = AxiosResponse<HobbyLogResponseDTO>>(
-    hobbyLogRequestDTO: HobbyLogRequestDTO, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/hobby-logs`,
-      hobbyLogRequestDTO,options
-    );
-  }
-export const getLogsByUser = <TData = AxiosResponse<HobbyLogResponseDTO[]>>(
-    userId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/api/hobby-logs/user/${userId}`,options
-    );
-  }
-export const deleteLog = <TData = AxiosResponse<null>>(
-    id: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/api/hobby-logs/${id}`,options
-    ).then((res) => {if (res.data === "") res.data = null; return res as TData;});
-  }
-export type CreateLogResult = AxiosResponse<HobbyLogResponseDTO>
-export type GetLogsByUserResult = AxiosResponse<HobbyLogResponseDTO[]>
-export type DeleteLogResult = AxiosResponse<null>
+  export const createLog = (
+    hobbyLogRequestDTO: HobbyLogRequestDTO,
+ ) => {
+      return axiosInstance<HobbyLogResponseDTO>(
+      {url: `/api/hobby-logs`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: hobbyLogRequestDTO
+    },
+      );
+    }
+  export const getLogsByUser = (
+    userId: number,
+ ) => {
+      return axiosInstance<HobbyLogResponseDTO[]>(
+      {url: `/api/hobby-logs/user/${userId}`, method: 'GET'
+    },
+      );
+    }
+  export const deleteLog = (
+    id: number,
+ ) => {
+      return axiosInstance<null>(
+      {url: `/api/hobby-logs/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  export type CreateLogResult = NonNullable<Awaited<ReturnType<typeof createLog>>>
+export type GetLogsByUserResult = NonNullable<Awaited<ReturnType<typeof getLogsByUser>>>
+export type DeleteLogResult = NonNullable<Awaited<ReturnType<typeof deleteLog>>>

@@ -1,12 +1,13 @@
 import { COLORS } from "@/constants/theme";
-import { axiosInstance } from "@/lib/axios";
-import { styles } from "@/styles/auth.styles";
+import { RegisterBody } from "@/models/api";
+import { register } from "@/src/api/auth-controller";
+import { styles } from "@/styles/styles";
+import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity } from "react-native";
-
 
 export default function Register() {
   const router = useRouter();
@@ -15,7 +16,22 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   
+
+  const pickImage = async () => {
+   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync(); 
+    if (permissionResult.granted === false) {
+      Alert.alert("Permission Denied", "Permission to access media library is required!");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+    });
+  }
 
 
   //TODO: Handle profile pictures later
@@ -28,17 +44,22 @@ export default function Register() {
     setLoading(true);
     try {
 
-      const formData = new FormData();
-      formData.append("user", JSON.stringify({ username, email, password }));
+      const registerBody: RegisterBody = {
+        user: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+        profilePhoto: profilePhoto ? {
+          uri: profilePhoto,
+          name: 'profile.jpg',
+          type: 'image/jpeg'
+        } as any : null,
+      };
 
-     
-      const response = await axiosInstance.post("/auth/register", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await register(registerBody);
 
-      await SecureStore.setItemAsync("token", response.data.token); 
+      await SecureStore.setItemAsync("token", response.data.token!); 
       console.log("Register success:", response.data.username);
 
       router.replace("../(tabs)");

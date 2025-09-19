@@ -9,5 +9,4 @@ export interface AuthResponseDTO {
   token?: string;
   userId?: number;
   username?: string;
-  profilePhoto?: string;
 }

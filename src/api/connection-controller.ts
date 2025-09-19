@@ -4,59 +4,60 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ConnectionRequestDTO,
   ConnectionResponseDTO
 } from '../../models/api';
 
+import { axiosInstance } from '../../lib/axios';
 
 
 
 
-  export const declineRequest = <TData = AxiosResponse<ConnectionResponseDTO>>(
-    id: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/connection/${id}/decline`,undefined,options
-    );
-  }
-export const acceptRequest = <TData = AxiosResponse<ConnectionResponseDTO>>(
-    id: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/connection/${id}/accept`,undefined,options
-    );
-  }
-export const sendRequest = <TData = AxiosResponse<ConnectionResponseDTO>>(
-    connectionRequestDTO: ConnectionRequestDTO, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/connection/send`,
-      connectionRequestDTO,options
-    );
-  }
-export const getConnectionsForUser = <TData = AxiosResponse<ConnectionResponseDTO[]>>(
-    userId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/api/connection/user/${userId}`,options
-    );
-  }
-export const getPendingRequests = <TData = AxiosResponse<ConnectionResponseDTO[]>>(
-    userId: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/api/connection/user/${userId}/pending`,options
-    );
-  }
-export type DeclineRequestResult = AxiosResponse<ConnectionResponseDTO>
-export type AcceptRequestResult = AxiosResponse<ConnectionResponseDTO>
-export type SendRequestResult = AxiosResponse<ConnectionResponseDTO>
-export type GetConnectionsForUserResult = AxiosResponse<ConnectionResponseDTO[]>
-export type GetPendingRequestsResult = AxiosResponse<ConnectionResponseDTO[]>
+  export const declineRequest = (
+    id: number,
+ ) => {
+      return axiosInstance<ConnectionResponseDTO>(
+      {url: `/api/connection/${id}/decline`, method: 'POST'
+    },
+      );
+    }
+  export const acceptRequest = (
+    id: number,
+ ) => {
+      return axiosInstance<ConnectionResponseDTO>(
+      {url: `/api/connection/${id}/accept`, method: 'POST'
+    },
+      );
+    }
+  export const sendRequest = (
+    connectionRequestDTO: ConnectionRequestDTO,
+ ) => {
+      return axiosInstance<ConnectionResponseDTO>(
+      {url: `/api/connection/send`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: connectionRequestDTO
+    },
+      );
+    }
+  export const getConnectionsForUser = (
+    userId: number,
+ ) => {
+      return axiosInstance<ConnectionResponseDTO[]>(
+      {url: `/api/connection/user/${userId}`, method: 'GET'
+    },
+      );
+    }
+  export const getPendingRequests = (
+    userId: number,
+ ) => {
+      return axiosInstance<ConnectionResponseDTO[]>(
+      {url: `/api/connection/user/${userId}/pending`, method: 'GET'
+    },
+      );
+    }
+  export type DeclineRequestResult = NonNullable<Awaited<ReturnType<typeof declineRequest>>>
+export type AcceptRequestResult = NonNullable<Awaited<ReturnType<typeof acceptRequest>>>
+export type SendRequestResult = NonNullable<Awaited<ReturnType<typeof sendRequest>>>
+export type GetConnectionsForUserResult = NonNullable<Awaited<ReturnType<typeof getConnectionsForUser>>>
+export type GetPendingRequestsResult = NonNullable<Awaited<ReturnType<typeof getPendingRequests>>>

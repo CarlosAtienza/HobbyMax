@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/authStore';
-import { styles } from '@/styles/auth.styles';
+import { styles } from '@/styles/styles';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React from 'react';

@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
-import { styles } from "@/styles/auth.styles";
+import { styles } from "@/styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
