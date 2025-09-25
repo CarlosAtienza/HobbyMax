@@ -100,4 +100,9 @@ export const styles = StyleSheet.create({
   },
   navIcon: { fontSize: 22, color: "white" },
   loadingText: { flex: 1, textAlign: "center", color: "white", marginTop: 50 },
+  hobbyList: {
+    justifyContent: 'center', 
+    width: '100%',
+    padding: 10,
+  }
 });

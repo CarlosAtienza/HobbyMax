@@ -8,6 +8,5 @@
 export interface HobbyRequestDTO {
   name?: string;
   description?: string;
-  updatedStreak?: number;
-  updatedLongestStreak?: number;
+  image?: string;
 }

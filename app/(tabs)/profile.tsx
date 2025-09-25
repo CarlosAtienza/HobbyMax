@@ -26,7 +26,7 @@ export default function Profile() {
         source={
         user.profilePhoto
           ? { uri: user.profilePhoto }
-          : require("@/assets/default-avatar.png")
+          : require("@/assets/images/default-avatar.jpg")
         }
         style={styles.avatar}
       />

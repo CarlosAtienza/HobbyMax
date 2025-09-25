@@ -1,6 +1,5 @@
-
-import { axiosInstance } from "@/lib/axios";
 import { HobbyResponseDTO } from "@/models/api";
+import { getAllHobbies } from "@/src/api/hobby-controller";
 import { create } from "zustand";
 
 interface HobbyState {
@@ -14,7 +13,7 @@ export const useHobbyStore = create<HobbyState>((set) => ({
 
   fetchHobbies: async (userId: number) => {
     try {
-      const response = await axiosInstance.get<HobbyResponseDTO[]>(`/hobbies/all/${userId}`);
+      const response = await getAllHobbies(userId);
       set({ hobbies: response.data });
     } catch (err) {
       console.error("Failed to fetch hobbies:", err);
