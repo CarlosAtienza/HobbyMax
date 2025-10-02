@@ -51,7 +51,10 @@ export default function CreateHobby() {
   return (
     <View style={styles.container}>
       
-      <Text>Create Your New Hobby</Text>
+      <Text style={styles.title}
+      numberOfLines={1}
+      adjustsFontSizeToFit
+      >Create Your New Hobby</Text>
         <TextInput
         style={styles.input}
         placeholder="Hobby Name"

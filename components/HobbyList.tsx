@@ -1,31 +1,46 @@
 import { useHobbyStore } from '@/stores/hobbyStore';
 import { useUserStore } from '@/stores/userStore';
 import { styles } from '@/styles/styles';
-import React, { useEffect } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
 
 export default function HobbyList() {
     const {hobbies, fetchHobbies, clearHobbies} = useHobbyStore();
     const {user} = useUserStore();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchHobbies(user?.id!); 
+        const loadHobbies = async () => {
+      if (user?.id) {
+        setLoading(true);
+        try {
+          await fetchHobbies(user.id);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    loadHobbies();
     }, [])
 
 
   return (
-    <View style={styles.container}>
-       <ScrollView style={styles.hobbyList}>
-        {hobbies.length === 0 ? (
-          <Text>No hobbies available.</Text>
-        ) : (
-            hobbies.map((hobby) => (
-                <View key={hobby.id}>
-                    <Text>{hobby.name}</Text>
-                </View>
+    <View>
+       <FlatList 
+       style={styles.hobbyList}
+       data={hobbies}
+       keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
+       contentContainerStyle={styles.container}
+       ListEmptyComponent={<Text>No Hobbies Createdf</Text>}
+       renderItem={({ item }) => (
+        <View>
+            <Text>{item.name}</Text>
+        </View>
+       )}
 
-            )))}
-       </ScrollView>
+       >
+       
+       </FlatList>
            
     </View>
     );

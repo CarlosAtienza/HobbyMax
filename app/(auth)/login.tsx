@@ -1,8 +1,10 @@
 import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
+import { useAuthStore } from "@/stores/authStore";
 import { styles } from "@/styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -11,6 +13,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setSignedIn } = useAuthStore();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -21,10 +24,16 @@ export default function Login() {
       });
 
       console.log("Login success:", response.data);
-      router.replace("../(tabs)");
+      
+      // Save token 
+      if (response.data.token) {
+        await SecureStore.setItemAsync("token", response.data.token);
+      }
+      setSignedIn(true);  
+      router.replace("/(tabs)");
     } catch (error: any) {
-      console.error("Login failed:", error.response?.data || error.message);
-      Alert.alert("Login Failed", "Invalid email or password");
+        Alert.alert("Login Failed", error.response.data.error)
+      
     } finally {
       setLoading(false);
     }

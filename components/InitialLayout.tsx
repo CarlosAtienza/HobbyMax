@@ -27,7 +27,7 @@ export default function InitialLayout() {
         const inAuthScreen = segments[0] === "(auth)";
 
         if (!isSignedIn && !inAuthScreen) {
-            router.replace("/(auth)/register");
+            router.replace("/(auth)/login");
         }
         else if (isSignedIn && inAuthScreen) {
             console.log("Redirecting to main app");

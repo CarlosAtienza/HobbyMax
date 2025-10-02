@@ -12,6 +12,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     setSignedIn: (signedIn: boolean) => set({ isSignedIn: signedIn }),
     checkToken: async () => {
         const token = await SecureStore.getItemAsync("token");
+        console.log("Token found:", !!token);
         set({ isSignedIn: !!token });
     },
 }));

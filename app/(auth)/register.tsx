@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/theme";
-import { RegisterBody } from "@/models/api";
-import { register } from "@/src/api/auth-controller";
+import { axiosInstance } from "@/lib/axios";
+import { useAuthStore } from "@/stores/authStore";
 import { styles } from "@/styles/styles";
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
@@ -17,6 +17,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const { setSignedIn } = useAuthStore();
   
 
   const pickImage = async () => {
@@ -43,30 +44,31 @@ export default function Register() {
 
     setLoading(true);
     try {
+      
+      const formData = new FormData();
+      formData.append("user", JSON.stringify({ username, email, password }));
 
-      const registerBody: RegisterBody = {
-        user: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
-        profilePhoto: profilePhoto ? {
-          uri: profilePhoto,
-          name: 'profile.jpg',
-          type: 'image/jpeg'
-        } as any : null,
-      };
 
-      const response = await register(registerBody);
+      const response = await axiosInstance.post("/auth/register", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
+
+      
       await SecureStore.setItemAsync("token", response.data.token!); 
       console.log("Register success:", response.data.username);
-
-      router.replace("../(tabs)");
+      setSignedIn(true);
+      router.replace("/(tabs)");
       
     } catch (error: any) {
-      console.error("Register failed:", error.response?.data || error.message);
-      Alert.alert("Register Failed", "Unable to create account");
+      if (error.response?.status === 409) {
+        Alert.alert("Register Failed", error.response.data.error)
+      }
+      else {
+        Alert.alert("Register failed: ", error.message)
+      }
     } finally {
       setLoading(false);
     }
