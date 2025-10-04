@@ -31,6 +31,7 @@ export default function Login() {
       }
       setSignedIn(true);  
       router.replace("/(tabs)");
+      
     } catch (error: any) {
         Alert.alert("Login Failed", error.response.data.error)
       

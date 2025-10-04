@@ -1,13 +1,14 @@
 import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 import { styles } from "@/styles/styles";
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from "react";
-import { Alert, Text, TextInput, TouchableOpacity } from "react-native";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Register() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const { setSignedIn } = useAuthStore();
+  const { setUser } = useUserStore();
   
 
   const pickImage = async () => {
@@ -32,10 +34,15 @@ export default function Register() {
       aspect: [1, 1],
       quality: 0.5,
     });
+
+    if (!result.canceled) {
+      setProfilePhoto(result.assets[0].uri);
+    }
+
   }
 
+  
 
-  //TODO: Handle profile pictures later
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match");
@@ -48,6 +55,17 @@ export default function Register() {
       const formData = new FormData();
       formData.append("user", JSON.stringify({ username, email, password }));
 
+      if (profilePhoto) {
+        const uriParts = profilePhoto.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+
+        formData.append("profilePhoto", {
+          uri: profilePhoto,
+          name: `profile.${fileType}`,
+          type: `image/${fileType}`,
+        } as any);
+      }
+
 
       const response = await axiosInstance.post("/auth/register", formData, {
         headers: {
@@ -55,11 +73,23 @@ export default function Register() {
         },
       });
 
+      const { token, userId } = response.data;
 
+      console.log("Received token:", token);
       
-      await SecureStore.setItemAsync("token", response.data.token!); 
+      await SecureStore.setItemAsync("token", token); 
       console.log("Register success:", response.data.username);
+      
+
+      //Fetching user data to store
+      const userResponse = await axiosInstance.get(`/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}`},
+      });
+
+      setUser(userResponse.data);
       setSignedIn(true);
+
+
       router.replace("/(tabs)");
       
     } catch (error: any) {
@@ -78,6 +108,21 @@ export default function Register() {
     <LinearGradient colors={[COLORS.black, COLORS.primary]} style={styles.container}>
   
       <Text style={styles.title}>Register</Text>
+
+      <View
+        style={styles.avatarContainer}
+      >
+        <TouchableOpacity onPress={pickImage} style={styles.avatarPlaceholder}>
+          {profilePhoto ? (
+            <Image 
+              source={{ uri: profilePhoto }}
+              style={styles.avatar}
+            />
+          ) : (
+            <Text style={styles.avatarText}>Pick a Profile Photo</Text>
+          )}
+        </TouchableOpacity>
+      </View>
 
       <TextInput
         style={styles.input}

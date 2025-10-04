@@ -50,10 +50,44 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  avatar: { width: 60, height: 60, borderRadius: 30, marginRight: 15 },
-  username: { fontSize: 18, fontWeight: "bold", color: "white" },
-  settingsButton: { marginLeft: "auto" },
-  settingsText: { fontSize: 22, color: "white" },
+  avatar: { 
+    width: 100,
+    height: 100,
+  },
+
+  avatarContainer: {
+    marginBottom: 20,
+    alignItems: "center",
+  },
+
+  avatarPlaceholder: {
+    width: 100,
+    height: 100,
+    backgroundColor: "#ccc",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+  
+  avatarText: {
+    color: "#666",
+    textAlign: "center",
+    paddingHorizontal: 10,
+  },
+
+  username: { 
+    fontSize: 18, 
+    fontWeight: "bold", 
+    color: "white" 
+  },
+  settingsButton: { 
+    marginLeft: "auto" 
+  },
+  settingsText: { 
+    fontSize: 22, 
+    color: "white" 
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",

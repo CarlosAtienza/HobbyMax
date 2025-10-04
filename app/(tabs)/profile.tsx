@@ -33,7 +33,7 @@ export default function Profile() {
       <Text style={styles.username}>{user.username}</Text>
       <TouchableOpacity
         style={styles.settingsButton}
-        onPress={() => router.push("/settings")}
+        onPress={() => router.push("../(tabs)/settings")}
       >
         <Text style={styles.settingsText}>⚙️</Text>
       </TouchableOpacity>
