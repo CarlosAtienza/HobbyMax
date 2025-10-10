@@ -1,6 +1,7 @@
 import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 import { styles } from "@/styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -13,9 +14,16 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setSignedIn } = useAuthStore();
+  const { setToken } = useAuthStore();
+  const { setUser } = useUserStore();
 
   const handleLogin = async () => {
+
+     if (!username || !password) {
+      Alert.alert("Error", "Please enter both username and password.");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axiosInstance.post("/auth/login", {
@@ -25,11 +33,19 @@ export default function Login() {
 
       console.log("Login success:", response.data);
       
-      // Save token 
-      if (response.data.token) {
-        await SecureStore.setItemAsync("token", response.data.token);
-      }
-      setSignedIn(true);  
+      const { token, userId } = response.data;
+
+      await SecureStore.setItemAsync("token", token);
+      await SecureStore.setItemAsync("userId", userId.toString());
+      await setToken(token);
+      
+
+      const userResponse = await axiosInstance.get(`/users/${userId}`, {
+              headers: { Authorization: `Bearer ${token}`},
+            });
+
+      setUser(userResponse.data);
+
       router.replace("/(tabs)");
       
     } catch (error: any) {

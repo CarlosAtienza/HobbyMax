@@ -1,18 +1,17 @@
 import { useAuthStore } from '@/stores/authStore';
 import { styles } from '@/styles/styles';
 import { useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import React from 'react';
 import { Alert, Button, Text, View } from 'react-native';
 
 export default function settings() {
     const router = useRouter();
-    const {isSignedIn, setSignedIn} = useAuthStore();
+    const {token, loadToken, logout} = useAuthStore();
+    
 
     const handleLogout = async () => {
         try {
-          await SecureStore.deleteItemAsync('token');
-          setSignedIn(false);
+          logout();
           router.replace('/(auth)/login'); 
         } catch (error) {
           console.error('Logout failed', error);

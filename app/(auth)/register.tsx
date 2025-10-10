@@ -18,7 +18,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
-  const { setSignedIn } = useAuthStore();
+  const { setToken } = useAuthStore();
   const { setUser } = useUserStore();
   
 
@@ -78,6 +78,7 @@ export default function Register() {
       console.log("Received token:", token);
       
       await SecureStore.setItemAsync("token", token); 
+      await SecureStore.setItemAsync("userId", userId.toString());
       console.log("Register success:", response.data.username);
       
 
@@ -87,7 +88,7 @@ export default function Register() {
       });
 
       setUser(userResponse.data);
-      setSignedIn(true);
+      await setToken(token);
 
 
       router.replace("/(tabs)");

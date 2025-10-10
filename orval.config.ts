@@ -10,9 +10,7 @@ export default defineConfig({
       // I recommend enabling this option if you generate an api client
       prettier: true, 
       clean: true, // recreate the whole folder (avoid outdated files)
-      override: {
-        mutator: { name: "axiosInstance", path: "./lib/axios.ts" },
-      },  
+      
 
     },
     input: {

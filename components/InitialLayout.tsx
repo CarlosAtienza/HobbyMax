@@ -1,30 +1,52 @@
 
 import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
+import { axiosInstance } from "../lib/axios";
 
 export default function InitialLayout() {
-   
 
     const segments = useSegments();
     const router = useRouter();
     const [isLoaded, setIsLoaded] = useState(false);
    
 
-    const { isSignedIn, checkToken } = useAuthStore();
+    const { token, loadToken, userId, logout } = useAuthStore();
+    const { setUser } = useUserStore();
+
+   
 
     useEffect(() => {
-            const init = async () => {
-                await checkToken();
+        
+        const init = async () => {
+            const {token: savedToken, userId: savedUserId } = await loadToken();
+           
+         
+            if (savedToken && savedUserId) {
+            
+                try {
+                    const userResponse = await axiosInstance.get(`/users/${savedUserId}`, {
+                        headers: { Authorization: `Bearer ${token}`},
+                        });
+                    //console.log("Fetched user data on init:", userResponse.data);
+                    setUser(userResponse.data);
+                } catch (error) {
+                    console.error("Failed to fetch user data", error);
+                    await logout();
+                    }
+            }
+
                 setIsLoaded(true);
                 };
             init();
-        }, []);
+        }, [loadToken]);
 
 
     useEffect(() => {
         if (!isLoaded) return;
         const inAuthScreen = segments[0] === "(auth)";
+        const isSignedIn = !!token;
 
         if (!isSignedIn && !inAuthScreen) {
             router.replace("/(auth)/login");
@@ -32,9 +54,10 @@ export default function InitialLayout() {
         else if (isSignedIn && inAuthScreen) {
             console.log("Redirecting to main app");
             router.replace("/(tabs)");
+
         }
 
-    }, [isLoaded, isSignedIn, segments])
+    }, [isLoaded, token, segments])
 
     if (!isLoaded) return null;
 

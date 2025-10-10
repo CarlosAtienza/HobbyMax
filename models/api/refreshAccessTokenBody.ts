@@ -5,8 +5,4 @@
  * OpenAPI spec version: v0
  */
 
-export interface UserRequestDTO {
-  username?: string;
-  email?: string;
-  password?: string;
-}
+export type RefreshAccessTokenBody = {[key: string]: string};

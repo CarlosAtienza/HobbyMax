@@ -31,7 +31,7 @@ export default function HobbyList() {
        data={hobbies}
        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
        contentContainerStyle={styles.container}
-       ListEmptyComponent={<Text>No Hobbies Createdf</Text>}
+       ListEmptyComponent={<Text>No Hobbies Created</Text>}
        renderItem={({ item }) => (
         <View>
             <Text>{item.name}</Text>
