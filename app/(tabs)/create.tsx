@@ -6,7 +6,7 @@ import { styles } from '@/styles/styles';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Text, TextInput, View } from 'react-native';
 
 
 
@@ -17,8 +17,10 @@ export default function create() {
      const [hobbyName, setHobbyName] = React.useState<string>("");
      const [hobbyDescription, setHobbyDescription] = React.useState<string>("");
      const [hobbyImage, setHobbyImage] = React.useState<string | null>(null);
-     const { createHobby } = useHobbyStore();
-     const { token } = useAuthStore();
+     const { hobbies, setHobbies } = useHobbyStore();
+     const { token, userId } = useAuthStore();
+     
+
  
  
      const pickImage = async () => {
@@ -33,6 +35,10 @@ export default function create() {
              aspect: [1, 1],
              quality: 0.5,
      });
+      if (!result.canceled) {
+          setHobbyImage(result.assets[0].uri);
+      }
+
      }
  
      const createNewHobby = async () => {
@@ -44,7 +50,29 @@ export default function create() {
              description: hobbyDescription,
          };
 
-         formData.append("hobby", JSON.stringify({ name: hobbyName, description: hobbyDescription }));
+        formData.append("name", hobbyName);
+        formData.append("description", hobbyDescription);
+        console.log("UserId in create hobby:", userId);
+        formData.append("userId", userId!.toString());
+
+        
+
+        if (hobbyImage) {
+          const uriParts = hobbyImage.split('.');
+          const fileType = uriParts[uriParts.length - 1];
+
+            console.log("IMAGE: ", hobbyImage);
+
+          formData.append("profilePhoto", {
+            uri: hobbyImage,
+            name: `hobbyImage.${fileType}`,
+            type: `image/${fileType}`,
+          } as any);
+        }
+
+
+
+
 
 
          const response = await axiosInstance.post("/hobbies", formData, {
@@ -54,6 +82,7 @@ export default function create() {
              },
          });
          Alert.alert("Success", "Hobby created successfully!");
+         setHobbies([...hobbies, response.data]);
  
          router.push("/(tabs)");
  
@@ -81,6 +110,18 @@ export default function create() {
          value={hobbyDescription}
          onChangeText={setHobbyDescription}
          />
+        <Text onPress={pickImage} style={styles.button}>Optional: Pick an image for your hobby</Text>
+        {hobbyImage ? (
+          <View>
+            <Text style={{marginTop: 10}}>Image selected</Text>
+            <Image
+              source={{ uri: hobbyImage }}
+              style={styles.hobbyImagePreview}
+            />
+          </View>
+        ) : (
+          <Text style={{marginTop: 10}}>No image selected</Text>
+        )}     
          <Text onPress={createNewHobby} style={styles.button}>Create Hobby</Text>
      </View>
    )

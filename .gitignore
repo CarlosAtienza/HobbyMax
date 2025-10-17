@@ -38,3 +38,5 @@ yarn-error.*
 
 app-example
 GoogleService-Info.plist
+
+src/api/

@@ -8,10 +8,7 @@
 export interface HobbyLogResponseDTO {
   id?: number;
   date?: string;
-  durationMinutes?: number;
   description?: string;
-  effortLevel?: number;
-  mood?: string;
   xpEarned?: number;
   hobbyId?: number;
   leveledUp?: boolean;

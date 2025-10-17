@@ -6,9 +6,6 @@
  */
 
 export interface HobbyLogRequestDTO {
-  durationMinutes?: number;
   description?: string;
-  effortLevel?: number;
-  mood?: string;
   hobbyId?: number;
 }

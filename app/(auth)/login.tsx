@@ -14,7 +14,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setToken } = useAuthStore();
+  const { loadToken } = useAuthStore();
   const { setUser } = useUserStore();
 
   const handleLogin = async () => {
@@ -37,7 +37,7 @@ export default function Login() {
 
       await SecureStore.setItemAsync("token", token);
       await SecureStore.setItemAsync("userId", userId.toString());
-      await setToken(token);
+      await loadToken();
       
 
       const userResponse = await axiosInstance.get(`/users/${userId}`, {

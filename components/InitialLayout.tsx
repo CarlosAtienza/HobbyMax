@@ -22,12 +22,14 @@ export default function InitialLayout() {
         const init = async () => {
             const {token: savedToken, userId: savedUserId } = await loadToken();
            
+            // console.log("Loaded token:", savedToken);
+            // console.log("Loaded userId:", savedUserId);
          
             if (savedToken && savedUserId) {
-            
+                
                 try {
                     const userResponse = await axiosInstance.get(`/users/${savedUserId}`, {
-                        headers: { Authorization: `Bearer ${token}`},
+                        headers: { Authorization: `Bearer ${savedToken}`},
                         });
                     //console.log("Fetched user data on init:", userResponse.data);
                     setUser(userResponse.data);
@@ -61,6 +63,10 @@ export default function InitialLayout() {
 
     if (!isLoaded) return null;
 
-    return <Stack screenOptions={{ headerShown: false }} />
+    return <Stack screenOptions={{ headerShown: false }}>
+       
+       
+
+    </Stack>
 
 }

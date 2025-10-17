@@ -18,7 +18,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
-  const { setToken } = useAuthStore();
+  const { loadToken, userId } = useAuthStore();
   const { setUser } = useUserStore();
   
 
@@ -88,7 +88,8 @@ export default function Register() {
       });
 
       setUser(userResponse.data);
-      await setToken(token);
+      
+      await loadToken();
 
 
       router.replace("/(tabs)");

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+   
     paddingHorizontal: 20,
   },
   title: {
@@ -105,12 +105,26 @@ export const styles = StyleSheet.create({
 
   hobbyCard: {
     flexDirection: "row",
-    backgroundColor: "white",
-    marginHorizontal: 15,
-    marginBottom: 10,
-    padding: 15,
-    borderRadius: 10,
     alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 10,
+    marginVertical: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginHorizontal: 10,
+    alignSelf: "stretch",
+  },
+  hobbyImageCard: {
+    marginRight: 15,
+    borderRadius: 25,
+    overflow: "hidden",
+    width: 80,
+    height: 80,
+    resizeMode: 'cover',
   },
   hobbyImage: { 
     width: 50, 
@@ -120,8 +134,16 @@ export const styles = StyleSheet.create({
   },
 
   hobbyInfo: { flex: 1 },
-  hobbyName: { fontSize: 16, fontWeight: "bold", color: "black" },
-  hobbyDetails: { fontSize: 14, color: "gray" },
+
+  hobbyName: { 
+    fontSize: 16, 
+    fontWeight: "bold", 
+    color: "black" 
+  },
+  hobbyDetails: { 
+    fontSize: 14, 
+    color: "gray" 
+  },
 
   bottomNav: {
     flexDirection: "row",
@@ -135,8 +157,15 @@ export const styles = StyleSheet.create({
   navIcon: { fontSize: 22, color: "white" },
   loadingText: { flex: 1, textAlign: "center", color: "white", marginTop: 50 },
   hobbyList: {
-    justifyContent: 'center', 
     width: '100%',
     padding: 10,
+  },
+  hobbyImagePreview: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginTop: 10,
+    resizeMode: 'cover',
+  
   }
 });

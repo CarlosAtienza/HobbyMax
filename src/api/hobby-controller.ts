@@ -11,6 +11,7 @@ import type {
 } from 'axios';
 
 import type {
+  CreateHobbyBody,
   HobbyRequestDTO,
   HobbyResponseDTO
 } from '../../models/api';
@@ -36,11 +37,18 @@ export const deleteHobby = <TData = AxiosResponse<void>>(
     );
   }
 export const createHobby = <TData = AxiosResponse<HobbyResponseDTO>>(
-    hobbyRequestDTO: HobbyRequestDTO, options?: AxiosRequestConfig
- ): Promise<TData> => {
+    createHobbyBody: CreateHobbyBody, options?: AxiosRequestConfig
+ ): Promise<TData> => {const formData = new FormData();
+if(createHobbyBody.hobbyRequestDto !== undefined) {
+ formData.append(`hobbyRequestDto`, JSON.stringify(createHobbyBody.hobbyRequestDto));
+ }
+if(createHobbyBody.image !== undefined) {
+ formData.append(`image`, createHobbyBody.image)
+ }
+
     return axios.post(
       `/api/hobbies`,
-      hobbyRequestDTO,options
+      formData,options
     );
   }
 export const getHobbyById = <TData = AxiosResponse<HobbyResponseDTO>>(
@@ -48,6 +56,15 @@ export const getHobbyById = <TData = AxiosResponse<HobbyResponseDTO>>(
  ): Promise<TData> => {
     return axios.get(
       `/api/hobbies/${hobbyId}`,options
+    );
+  }
+export const helloWorld = <TData = AxiosResponse<string>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/api/hobbies/test`,{
+        responseType: 'text',
+    ...options,}
     );
   }
 export const getAllHobbies = <TData = AxiosResponse<HobbyResponseDTO[]>>(
@@ -61,4 +78,5 @@ export type UpdateHobbyResult = AxiosResponse<HobbyResponseDTO>
 export type DeleteHobbyResult = AxiosResponse<void>
 export type CreateHobbyResult = AxiosResponse<HobbyResponseDTO>
 export type GetHobbyByIdResult = AxiosResponse<HobbyResponseDTO>
+export type HelloWorldResult = AxiosResponse<string>
 export type GetAllHobbiesResult = AxiosResponse<HobbyResponseDTO[]>

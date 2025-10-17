@@ -1,27 +1,19 @@
-import { useHobbyStore } from '@/stores/hobbyStore';
-import { useUserStore } from '@/stores/userStore';
+import { HobbyResponseDTO } from '@/models/api';
 import { styles } from '@/styles/styles';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
-export default function HobbyList() {
-    const {hobbies, fetchHobbies, clearHobbies} = useHobbyStore();
-    const {user} = useUserStore();
-    const [loading, setLoading] = useState(false);
+interface HobbyListProps {
+  hobbies: HobbyResponseDTO[];
+  loading: boolean;
+}
 
-    useEffect(() => {
-        const loadHobbies = async () => {
-      if (user?.id) {
-        setLoading(true);
-        try {
-          await fetchHobbies(user.id);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-    loadHobbies();
-    }, [])
+export default function HobbyList({ hobbies, loading }: HobbyListProps) {
+  
+    const router = useRouter();
+
+    
 
 
   return (
@@ -30,12 +22,40 @@ export default function HobbyList() {
        style={styles.hobbyList}
        data={hobbies}
        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-       contentContainerStyle={styles.container}
+       contentContainerStyle={{paddingBottom: 20}}
        ListEmptyComponent={<Text>No Hobbies Created</Text>}
        renderItem={({ item }) => (
-        <View>
-            <Text>{item.name}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            if (typeof item.id === 'number') {
+              router.push({ 
+                pathname: "/hobby/[id]", 
+                params: { 
+                  hobbyData: JSON.stringify(item),
+                  id: item.id.toString(),
+                } 
+              });
+            }
+          }}
+        >
+        <View style={styles.hobbyCard}>
+              <Image
+                source={
+                  item.hobbyImage ? 
+                  { uri: item.hobbyImage } : 
+                  require('@/assets/images/hobbyImagePlaceHolder.png')
+                }
+                style={styles.hobbyImageCard}
+              >
+              </Image>
+
+              <View style={styles.hobbyInfo}>
+              <Text style={styles.hobbyName}>{item.name}</Text>
+                        
+            </View>
+          </View>
+          </TouchableOpacity>       
+          
        )}
 
        >

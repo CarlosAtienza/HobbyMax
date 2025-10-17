@@ -8,5 +8,5 @@
 export interface HobbyRequestDTO {
   name?: string;
   description?: string;
-  image?: string;
+  userId?: number;
 }

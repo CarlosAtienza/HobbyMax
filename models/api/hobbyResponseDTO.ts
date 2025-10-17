@@ -17,4 +17,5 @@ export interface HobbyResponseDTO {
   currentStreak?: number;
   longestStreak?: number;
   logs?: HobbyLogResponseDTO[];
+  hobbyImage?: string;
 }
