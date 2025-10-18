@@ -1,25 +1,37 @@
 import HobbyLogList from '@/components/HobbyLogList';
-import { HobbyLogResponseDTO, HobbyResponseDTO } from '@/models/api';
+import { useAuthStore } from '@/stores/authStore';
+import { useHobbyLogStore } from '@/stores/hobbyLogStore';
+import { useHobbyStore } from '@/stores/hobbyStore';
 import { useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 
 
 export default function HobbyDetails() {
-  const { hobbyData: hobbyDataRaw, id: idRaw } = useLocalSearchParams();
-
-  // Normalize to string
-  const hobbyData = Array.isArray(hobbyDataRaw) ? hobbyDataRaw[0] : hobbyDataRaw ?? '';
+  
+  const {id: idRaw } = useLocalSearchParams();
   const id = Array.isArray(idRaw) ? idRaw[0] : idRaw ?? '';
+  const {fetchHobbyLogs} = useHobbyLogStore();
+  const { token } = useAuthStore();
+  const { hobbies } = useHobbyStore();
 
-  const parsedHobbyData: HobbyResponseDTO | null = hobbyData
-    ? JSON.parse(hobbyData)
-    : null;
+  useEffect(() => {
+    const hobbyId = Number(id);
 
-  const logs: HobbyLogResponseDTO[] = parsedHobbyData?.logs ?? [];
+    fetchHobbyLogs(hobbyId, token!);
+
+  }, [id, token, hobbies])
+
+
+
+
+  console.log("Hobby Details - ID:", id);
+
+
+
   return (
     <View>
-      <HobbyLogList hobbyId={Number(id)} logs={logs} />
+      <HobbyLogList hobbyId={Number(id)} />
     </View>
   )
 }

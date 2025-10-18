@@ -166,6 +166,54 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     resizeMode: 'cover',
-  
-  }
+  },
+  hobbyLogContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  createLogCard: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    padding: 20,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 100,
+  },
+  sectionTitleBlack: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: 'black',
+  },
+  cancelButton: {
+    backgroundColor: 'red',
+    marginTop: 10,
+    borderRadius: 12,
+    height: 55,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  descriptionInput: {
+  width: '100%',
+  minHeight: 100,
+  backgroundColor: COLORS.white,
+  borderRadius: 12,
+  padding: 10,
+  marginBottom: 20,
+  fontSize: 16,
+  textAlignVertical: 'top', 
+  borderWidth: 1,
+  borderColor: '#ccc', 
+},
+
 });

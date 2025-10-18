@@ -20,6 +20,7 @@ export const useHobbyLogStore = create<HobbyLogState>((set) => ({
             const response = await axiosInstance.get(`/hobby-logs/${hobbyId}`, {
                 headers: {Authorization: `Bearer ${token}` }
             })
+            set({hobbyLogs: response.data})
         } catch (err) {
             console.error("Failed to fetch hobby logs:", err);
         }

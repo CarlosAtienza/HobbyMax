@@ -22,7 +22,7 @@ export default function InitialLayout() {
         const init = async () => {
             const {token: savedToken, userId: savedUserId } = await loadToken();
            
-            // console.log("Loaded token:", savedToken);
+            console.log("Loaded token:", savedToken);
             // console.log("Loaded userId:", savedUserId);
          
             if (savedToken && savedUserId) {

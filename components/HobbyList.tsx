@@ -1,7 +1,9 @@
 import { HobbyResponseDTO } from '@/models/api';
+import { useAuthStore } from '@/stores/authStore';
+import { useHobbyStore } from '@/stores/hobbyStore';
 import { styles } from '@/styles/styles';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
 interface HobbyListProps {
@@ -9,9 +11,36 @@ interface HobbyListProps {
   loading: boolean;
 }
 
-export default function HobbyList({ hobbies, loading }: HobbyListProps) {
+export default function HobbyList() {
+  const [logs, setLogs] = React.useState<HobbyResponseDTO[]>([]);
+  const router = useRouter();
+
+
+  const {token, userId} = useAuthStore();
   
-    const router = useRouter();
+    //console.log("UserScreen - userId:", userId, "token:", token);
+  
+    const { hobbies, setHobbies, fetchHobbiesByUserId } = useHobbyStore();
+  
+    const[loading, setLoading] = React.useState(false);
+  
+    useEffect(() => {
+    const loadHobbies = async () => {
+      if (userId && token) {
+        console.log("Fetching hobbies for userId:", userId);
+        setLoading(true);
+        try {
+          await fetchHobbiesByUserId(userId, token);
+        } catch (err) {
+          console.error("Error fetching hobbies in UserScreen:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+  
+    loadHobbies();
+  }, [userId, token]);
 
     
 

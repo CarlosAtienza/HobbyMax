@@ -1,5 +1,6 @@
-import { HobbyLogResponseDTO } from '@/models/api'
 import { useAuthStore } from '@/stores/authStore'
+import { useHobbyLogStore } from '@/stores/hobbyLogStore'
+import { useHobbyStore } from '@/stores/hobbyStore'
 import { styles } from '@/styles/styles'
 import React from 'react'
 import { Alert, Button, FlatList, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
@@ -7,15 +8,18 @@ import { axiosInstance } from '../lib/axios'
 
 
 interface HobbyLogListProps {
-  logs: HobbyLogResponseDTO[];
   hobbyId: number;
 }
 
-export default function HobbyLogList({ logs, hobbyId }: HobbyLogListProps) {
+export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [newDescription, setNewDescription] = React.useState('');
   const { token } = useAuthStore();
-  const [localLogs, setLocalLogs] = React.useState<HobbyLogResponseDTO[]>(logs);
+  const {hobbies, setHobbies} = useHobbyStore();
+  const {hobbyLogs, setHobbyLogs} = useHobbyLogStore();
+
+ 
+  
 
   const handleCreateLog = async () => {
     if (newDescription) {
@@ -26,13 +30,25 @@ export default function HobbyLogList({ logs, hobbyId }: HobbyLogListProps) {
       
       
       const response = await axiosInstance.post('/hobby-logs', formData, {
-        headers: { 'Content-Type': 'multipart/form-data',
+        headers: { 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
          },
       })
 
       Alert.alert("Success", "Hobby Log added!");
-      setLocalLogs([...localLogs, response.data]);
+
+      const updatedHobbies = hobbies.map(hobby => {
+        if (hobby.id === hobbyId) {
+          return {
+            ...hobby,
+            logs: [...(hobby.logs ?? []), response.data],
+          };
+        }
+        return hobby;
+      });
+      setHobbies(updatedHobbies);
+
+
       setModalVisible(false);
       setNewDescription('');
 
@@ -48,10 +64,11 @@ export default function HobbyLogList({ logs, hobbyId }: HobbyLogListProps) {
    return (
     <View>
       <FlatList
-        data={[{ id: 'create-card', description: '', title: '' }, ...localLogs]}
+        data={[{ id: 'create-card', description: '', title: '' }, ...hobbyLogs]}
         ListEmptyComponent={<Text>No Logs Created</Text>}
         keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
+        
         renderItem={({ item }) => {
           if (item.id === 'create-card') {
             return (
@@ -72,16 +89,18 @@ export default function HobbyLogList({ logs, hobbyId }: HobbyLogListProps) {
         }}
       />
 
-      {/* Modal for creating a new log */}
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 20, backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>New Hobby Log</Text>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.sectionTitleBlack}>New Hobby Log</Text>
             <TextInput
               placeholder="Description"
               value={newDescription}
               onChangeText={setNewDescription}
-              style={{ borderBottomWidth: 1, marginBottom: 10 }}
+              style={styles.descriptionInput}
+              numberOfLines={5}
+              multiline={true}
+              textAlignVertical='top'
             />
             <Button title="Create" onPress={handleCreateLog} />
             <Button title="Cancel" color="red" onPress={() => setModalVisible(false)} />
