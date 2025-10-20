@@ -21,6 +21,10 @@ export default function TabLayout() {
                 tabBarIcon: ({size, color}) => <Ionicons name="add-circle" size={size} color={COLORS.primary} />,
                 }} />
 
+            <Tabs.Screen name='search' options={{
+                tabBarIcon: ({size, color}) => <Ionicons name="search" size={size} color={COLORS.primary}/>
+            }}/>
+
             <Tabs.Screen name="profile" options={{ 
                 tabBarIcon: ({size, color}) => <Ionicons name="person" size={size} color={COLORS.primary} />,
                 }} />

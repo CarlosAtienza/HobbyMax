@@ -2,6 +2,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useHobbyLogStore } from '@/stores/hobbyLogStore'
 import { useHobbyStore } from '@/stores/hobbyStore'
 import { styles } from '@/styles/styles'
+import Slider from "@react-native-community/slider"
 import React from 'react'
 import { Alert, Button, FlatList, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { axiosInstance } from '../lib/axios'
@@ -89,10 +90,15 @@ export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
         }}
       />
 
+      
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.sectionTitleBlack}>New Hobby Log</Text>
+            <Slider
+            minimumValue={1}
+            maximumValue={10}
+            />
             <TextInput
               placeholder="Description"
               value={newDescription}

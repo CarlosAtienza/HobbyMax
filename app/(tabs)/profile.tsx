@@ -1,14 +1,30 @@
+import { useAuthStore } from "@/stores/authStore";
+import { useConnectionStore } from "@/stores/connectionStores";
 import { useHobbyStore } from "@/stores/hobbyStore";
 import { useUserStore } from "@/stores/userStore";
 import { styles } from "@/styles/styles";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function Profile() {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const hobbies = useHobbyStore((state) => state.hobbies);
+  const { connections, fetchConnectionsByUserId } = useConnectionStore();
+  const { userId, token } = useAuthStore();
+
+  useEffect(() => {
+      const loadConnections = async () => {
+        try {
+          if (userId && token) {
+            const response = await fetchConnectionsByUserId(userId, token);
+          }
+        } catch (err){
+          console.log("Failed to fetch connections")
+        }
+      }
+  }, [userId, token])
 
   if (!user) {
     return (
@@ -37,6 +53,10 @@ export default function Profile() {
       >
         <Text style={styles.settingsText}>⚙️</Text>
       </TouchableOpacity>
+      
+      </View>
+      <View>
+        
       </View>
     </View>
   );

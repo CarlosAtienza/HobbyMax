@@ -215,5 +215,9 @@ export const styles = StyleSheet.create({
   borderWidth: 1,
   borderColor: '#ccc', 
 },
+slider: {
+  width: 200,
+  height: 40,
+}
 
 });
