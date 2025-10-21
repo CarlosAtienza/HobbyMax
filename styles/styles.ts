@@ -218,6 +218,33 @@ export const styles = StyleSheet.create({
 slider: {
   width: 200,
   height: 40,
-}
+},
+searchCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  searchAvatarContainer: {
+    marginRight: 15,
+  },
+
+  searchAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+
+  searchInfo: {
+    flex: 1,
+    justifyContent: "center",
+  },
 
 });

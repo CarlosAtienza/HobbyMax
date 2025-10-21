@@ -87,6 +87,8 @@ export default function Register() {
         headers: { Authorization: `Bearer ${token}`},
       });
 
+      console.log("Fetched User: ", userResponse.data.username);
+
       setUser(userResponse.data);
       
       await loadToken();
