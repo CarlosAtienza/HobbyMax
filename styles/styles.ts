@@ -246,5 +246,79 @@ searchCard: {
     flex: 1,
     justifyContent: "center",
   },
+  headerCard: {
+    width: '100%',
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  calendarContainer: {
+    marginTop: 20,
+  },
+  weekHeader: {
+    fontSize: 22,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  weekRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dayButton: {
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#f3f3f3',
+    width: 45,
+  },
+  todayButton: {
+    backgroundColor: '#007AFF',
+  },
+  dayLabel: {
+    fontSize: 12,
+    color: '#333',
+  },
+  dayNumber: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+ 
+  modalContainer: {
+    backgroundColor: '#fff',
+    width: '85%',
+    borderRadius: 12,
+    padding: 20,
+    maxHeight: '70%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
+  },
+  logItem: {
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  logText: {
+    fontSize: 15,
+  },
+  noLogsText: {
+    textAlign: 'center',
+    color: '#888',
+    marginTop: 20,
+  },
+  closeButton: {
+    backgroundColor: '#007AFF',
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
 
 });

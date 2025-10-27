@@ -17,7 +17,7 @@ export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
   const [newDescription, setNewDescription] = React.useState('');
   const { token } = useAuthStore();
   const {hobbies, setHobbies} = useHobbyStore();
-  const {hobbyLogs, setHobbyLogs} = useHobbyLogStore();
+  const {hobbyLogs, setHobbyLogs, setWeeklyLogs, weeklyLogs} = useHobbyLogStore();
 
  
   
@@ -47,6 +47,10 @@ export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
         }
         return hobby;
       });
+
+      //Updating weekly logs
+      setWeeklyLogs([...(weeklyLogs), response.data]);
+
       setHobbies(updatedHobbies);
 
 
