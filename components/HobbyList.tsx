@@ -6,10 +6,7 @@ import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
-interface HobbyListProps {
-  hobbies: HobbyResponseDTO[];
-  loading: boolean;
-}
+
 
 export default function HobbyList() {
   const [logs, setLogs] = React.useState<HobbyResponseDTO[]>([]);
