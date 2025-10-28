@@ -49,7 +49,6 @@ export default function Profile() {
       />
       <View style={{ flex: 1, marginLeft: 20 }}>
           <Text style={styles.username}>{user.username}</Text>
-          <Text style={{ color: "#aaa", marginTop: 4 }}>@{user.email}</Text>
         </View>
       <TouchableOpacity
         style={styles.settingsButton}
@@ -74,7 +73,7 @@ export default function Profile() {
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: COLORS.white,
     paddingHorizontal: 20,
     paddingTop: 50,
   },

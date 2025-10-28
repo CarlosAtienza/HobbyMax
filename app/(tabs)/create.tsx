@@ -1,3 +1,4 @@
+import { COLORS } from '@/constants/theme';
 import { axiosInstance } from '@/lib/axios';
 import { HobbyRequestDTO } from '@/models/api';
 import { useAuthStore } from '@/stores/authStore';
@@ -6,7 +7,7 @@ import { styles } from '@/styles/styles';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, Image, Text, TextInput, View } from 'react-native';
+import { Alert, Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 
 
@@ -19,10 +20,12 @@ export default function create() {
      const [hobbyImage, setHobbyImage] = React.useState<string | null>(null);
      const { hobbies, setHobbies } = useHobbyStore();
      const { token, userId } = useAuthStore();
-     
+     const screenHeight = Dimensions.get('window').height;
+     const [experienceLevel, setExperienceLevel] = React.useState<'Beginner' | 'Intermediate' | 'Advanced'>('Beginner');
+     const [goal, setGoal] = React.useState('');
+     const [step, setStep] = React.useState(1);
+    
 
- 
- 
      const pickImage = async () => {
          const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync(); 
          if (permissionResult.granted === false) {
@@ -42,6 +45,7 @@ export default function create() {
      }
  
      const createNewHobby = async () => {
+      setStep(1);
       try {
         const formData = new FormData();
 
@@ -90,39 +94,125 @@ export default function create() {
          console.error("Failed to create hobby:", err);
          Alert.alert("Error", "Failed to create hobby. Please try again.");}
      }
+
+
+   
  
    return (
-     <View style={styles.container}>
-       
-       <Text style={styles.title}
-       numberOfLines={1}
-       adjustsFontSizeToFit
-       >Create Your New Hobby</Text>
-         <TextInput
-         style={styles.input}
-         placeholder="Hobby Name"
-         value={hobbyName}
-         onChangeText={setHobbyName}
-         />
-         <TextInput
-         style={styles.input}
-         placeholder="Hobby Description"
-         value={hobbyDescription}
-         onChangeText={setHobbyDescription}
-         />
-        <Text onPress={pickImage} style={styles.button}>Optional: Pick an image for your hobby</Text>
-        {hobbyImage ? (
-          <View>
-            <Text style={{marginTop: 10}}>Image selected</Text>
-            <Image
-              source={{ uri: hobbyImage }}
-              style={styles.hobbyImagePreview}
-            />
+
+     <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 100}
+      >
+     <ScrollView contentContainerStyle={[styles.container, {padding: 20}]}>
+
+    
+     
+
+      {step ===1 && (
+        <>
+          <TouchableOpacity
+              onPress={() => {
+                if (!hobbyName.trim() || !hobbyDescription.trim()) {
+                  Alert.alert('Error', 'Please fill in the hobby name and description.');
+                  return;
+                }
+              
+                setStep(2);
+              }}
+              style={{
+                alignSelf: 'flex-end',
+                marginBottom: 20,
+                padding: 10,
+                backgroundColor: COLORS.primary,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ color: '#fff', fontWeight: 'bold' }}>Next</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={pickImage} style={{ marginBottom: 20, alignItems: 'center' }}>
+              {hobbyImage ? (
+            <View>
+              <Image
+                source={{ uri: hobbyImage }}
+                style={{ width: '100%', height: screenHeight * 0.0005, borderRadius: 12 }}
+              />
+            </View>
+          ) : (
+            <View
+              style={{
+                width: '100%',
+                height: screenHeight * 0.5,
+                backgroundColor: COLORS.gray,
+                borderRadius: 12,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ color: COLORS.gray }}>Tap to select an image</Text>
+            </View>
+          )}     
+          </TouchableOpacity>
+
+        
+    
+          <TextInput
+          style={[styles.input, { marginBottom: 12 }]}
+          placeholder="Hobby Name"
+          placeholderTextColor={COLORS.black}
+          value={hobbyName}
+          onChangeText={setHobbyName}
+          />
+          <TextInput
+          style={[styles.input, { marginBottom: 12, height: 80 }]}
+          placeholder="Hobby Description"
+          placeholderTextColor={COLORS.black}
+          value={hobbyDescription}
+          onChangeText={setHobbyDescription}
+          />
+        
+      </>
+      )}
+
+      {step === 2 && (
+        <>
+          <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 10 }}>Experience Level</Text>
+          {['Beginner', 'Intermediate', 'Advanced'].map(level => (
+            <TouchableOpacity
+              key={level}
+              onPress={() => setExperienceLevel(level as any)}
+              style={{
+                padding: 12,
+                backgroundColor: experienceLevel === level ? COLORS.primary : COLORS.gray,
+                borderRadius: 8,
+                marginBottom: 8,
+              }}
+            >
+              <Text style={{ color: '#fff', textAlign: 'center' }}>{level}</Text>
+            </TouchableOpacity>
+          ))}
+
+          <TextInput
+            style={[styles.input, { marginBottom: 12, height: 80 }]}
+            placeholder="Your Goal (e.g., read 3 books/week)"
+            placeholderTextColor={COLORS.black}
+            value={goal}
+            onChangeText={setGoal}
+          />
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <TouchableOpacity onPress={() => setStep(1)} style={[styles.button, { flex: 0.45 }]}>
+              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={createNewHobby} style={[styles.button, { flex: 0.45 }]}>
+              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>Create Hobby</Text>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <Text style={{marginTop: 10}}>No image selected</Text>
-        )}     
-         <Text onPress={createNewHobby} style={styles.button}>Create Hobby</Text>
-     </View>
+        </>
+      )}
+       
+     </ScrollView>
+     </KeyboardAvoidingView>
    )
 }

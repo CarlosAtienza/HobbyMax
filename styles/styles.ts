@@ -6,10 +6,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
    
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   title: {
-    fontSize: 40,
+    fontSize: 25,
     fontWeight: 'bold',
     color: COLORS.primary,
     marginBottom: 50,
@@ -91,9 +91,10 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 20,
+    padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "gray",
+    color: COLORS.success
   },
 
   sectionTitle: {
@@ -249,7 +250,7 @@ searchCard: {
   headerCard: {
     width: '100%',
     borderRadius: 20,
-    padding: 20,
+    padding: 5,
     marginBottom: 20,
     alignItems: 'center',
   },
