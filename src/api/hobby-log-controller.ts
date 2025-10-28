@@ -27,6 +27,13 @@ import type {
       hobbyLogRequestDTO,options
     );
   }
+export const getLogsForCurrentWeek = <TData = AxiosResponse<HobbyLogResponseDTO[]>>(
+    userId: number, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/api/hobby-logs/${userId}/logs/week`,options
+    );
+  }
 export const getLogsByHobbyId = <TData = AxiosResponse<HobbyLogResponseDTO[]>>(
     hobbyId: number, options?: AxiosRequestConfig
  ): Promise<TData> => {
@@ -49,6 +56,7 @@ export const deleteLog = <TData = AxiosResponse<void>>(
     );
   }
 export type CreateLogResult = AxiosResponse<HobbyLogResponseDTO>
+export type GetLogsForCurrentWeekResult = AxiosResponse<HobbyLogResponseDTO[]>
 export type GetLogsByHobbyIdResult = AxiosResponse<HobbyLogResponseDTO[]>
 export type GetLogsByUserResult = AxiosResponse<HobbyLogResponseDTO[]>
 export type DeleteLogResult = AxiosResponse<void>

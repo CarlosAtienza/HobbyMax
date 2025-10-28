@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 import type { ConnectionResponseDTOStatus } from './connectionResponseDTOStatus';
+import type { UserResponseDTO } from './userResponseDTO';
 
 export interface ConnectionResponseDTO {
   id?: number;
-  requesterUsername?: string;
-  receiverUsername?: string;
+  user?: UserResponseDTO;
   status?: ConnectionResponseDTOStatus;
   createdAt?: string;
 }

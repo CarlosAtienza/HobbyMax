@@ -1,11 +1,10 @@
 import { axiosInstance } from '@/lib/axios';
+import { ConnectionResponseDTO, UserResponseDTO } from '@/models/api';
 import { useAuthStore } from '@/stores/authStore';
 import { useConnectionStore } from '@/stores/connectionStores';
 import { styles } from '@/styles/styles';
-import { ConnectionResponseDTO, UserResponseDTO } from '@/types';
 import React, { useEffect } from 'react';
 import { Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-
 export default function ConnectionList() {
     const [ connections, setConnections ] = React.useState<ConnectionResponseDTO[]>();
     const [ unAcceptedConnections, setUnAcceptedConnections ] = React.useState<ConnectionResponseDTO[]>([]);
@@ -25,12 +24,16 @@ export default function ConnectionList() {
             } catch (err){
               console.log("Failed to fetch connections")
             }
-          }
-      }, [userId, token])
+          };
+          loadConnections();
+      }, [userId, token]);
 
+//Approve a pending request
 const approveRequest = async (user: UserResponseDTO) => {
   try {
-    const response = await axiosInstance.post(`/connection/${user.username}/accept`);
+    const response = await axiosInstance.post(`/connection/${user.username}/accept`, {}, {
+      headers: {Authorization: `Bearer ${token}`}
+    });
     setUnAcceptedConnections([...unAcceptedConnections, response.data ])
   } catch(err : any) {
     console.log("Failed to approve request", err.message);
@@ -49,39 +52,42 @@ const approveRequest = async (user: UserResponseDTO) => {
     );
   };
 
+ 
   //Right now item is a Connection response DTO, but im treating it like a userResponse, either 
   //Change it to userreponse or do something else
   return (
     <View>
-      <FlatList
+       <FlatList
         data={connections}
-        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-        contentContainerStyle={{padding: 20}}
-        renderItem={({ item }) => (
-            <TouchableOpacity 
-                          style={styles.searchCard}
-                          onPress={() => handlePress(item)}            
-                        >
-                          <View style={styles.searchAvatarContainer}>
-                           
-                            <Image source={ 
-                              item.profilePhoto 
-                               ? {uri: item.profilePhoto}
-                               : require("@/assets/images/default-avatar.jpg")
-                            }
-                                style={styles.searchAvatar}/>
-                          </View>
-            
-                          <View style={styles.searchInfo}>
-                            <Text style={styles.username}>{item.username}</Text>
-                          </View>
-                        </TouchableOpacity>
-          )
-           
-        }
-        >
+        keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+        contentContainerStyle={{ padding: 20 }}
+        renderItem={({ item }) => {
+          const user = item.user!;
 
-      </FlatList>
+          return (
+            <TouchableOpacity
+              style={styles.searchCard}
+              onPress={() => handlePress(user)}
+            >
+              <View style={styles.searchAvatarContainer}>
+                <Image
+                  source={
+                    user.profilePhoto
+                      ? { uri: user.profilePhoto }
+                      : require('@/assets/images/default-avatar.jpg')
+                  }
+                  style={styles.searchAvatar}
+                />
+              </View>
+
+              <View style={styles.searchInfo}>
+                <Text style={styles.username}>{user.username}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
+          
     </View>
   )
 }
