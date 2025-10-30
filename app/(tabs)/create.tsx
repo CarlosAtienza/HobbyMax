@@ -7,12 +7,29 @@ import { styles } from '@/styles/styles';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Button,
+  Dimensions,
+  FlatList,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 
 
 export default function create() {
 
+type Goal = {
+  id: string;
+  value: string;
+};
 
  const router = useRouter();
      const [hobbyName, setHobbyName] = React.useState<string>("");
@@ -22,7 +39,8 @@ export default function create() {
      const { token, userId } = useAuthStore();
      const screenHeight = Dimensions.get('window').height;
      const [experienceLevel, setExperienceLevel] = React.useState<'Beginner' | 'Intermediate' | 'Advanced'>('Beginner');
-     const [goal, setGoal] = React.useState('');
+     const [goals, setGoals] = React.useState<{ id: string, value: string }[]>([]);
+     const [goalInput, setGoalInput] = React.useState<string>('')
      const [step, setStep] = React.useState(1);
     
 
@@ -74,6 +92,11 @@ export default function create() {
           } as any);
         }
 
+        if (goals && goals.length > 0) {
+          goals.forEach((g, idx) => {
+            formData.append(`goals[${idx}]`, g.value);
+          });
+        }
 
 
 
@@ -93,6 +116,14 @@ export default function create() {
          } catch (err) {
          console.error("Failed to create hobby:", err);
          Alert.alert("Error", "Failed to create hobby. Please try again.");}
+     }
+
+     const addGoalHandler = async () => {
+      if (!goalInput.trim()){
+        Alert.alert('Empty Field', "Add text in the field")
+      }
+      setGoals([...goals, {id: Math.random().toString(), value: goalInput}]);
+      setGoalInput('');
      }
 
 
@@ -177,6 +208,21 @@ export default function create() {
 
       {step === 2 && (
         <>
+          <TouchableOpacity
+              onPress={() => {
+                setStep(1);
+              }}
+              style={{
+                alignSelf: 'flex-start',
+                marginBottom: 20,
+                padding: 10,
+                backgroundColor: COLORS.primary,
+                borderRadius: 8,
+              }}
+            >
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Back</Text>
+          </TouchableOpacity>
+
           <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 10 }}>Experience Level</Text>
           {['Beginner', 'Intermediate', 'Advanced'].map(level => (
             <TouchableOpacity
@@ -192,14 +238,27 @@ export default function create() {
               <Text style={{ color: '#fff', textAlign: 'center' }}>{level}</Text>
             </TouchableOpacity>
           ))}
-
+        <View style={styles.goalContainer}>
           <TextInput
             style={[styles.input, { marginBottom: 12, height: 80 }]}
             placeholder="Your Goal (e.g., read 3 books/week)"
             placeholderTextColor={COLORS.black}
-            value={goal}
-            onChangeText={setGoal}
+            value={goalInput}
+            onChangeText={setGoalInput}
           />
+          <Button title="Add" onPress={addGoalHandler}/>
+          </View>
+          <FlatList<Goal>
+            data={goals}
+            keyExtractor={(item) => item.id}
+            renderItem={ ({ item }) => (
+              <View>
+                <Text>{item.value}</Text>
+              </View>
+            )}
+          />
+
+
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => setStep(1)} style={[styles.button, { flex: 0.45 }]}>
