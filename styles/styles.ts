@@ -322,4 +322,32 @@ searchCard: {
     fontWeight: '600',
   },
 
+  hobbyHeaderSection: {
+  backgroundColor: COLORS.white,
+  marginBottom: 16,
+},
+
+hobbyHeaderImage: {
+  width: '100%',
+  height: 200,
+  backgroundColor: COLORS.grayLight,
+},
+
+hobbyInfoContainer: {
+  padding: 16,
+},
+
+hobbyTitle: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  color: COLORS.primaryDark,
+  marginBottom: 8,
+},
+
+hobbyDescription: {
+  fontSize: 14,
+  color: COLORS.gray,
+  lineHeight: 20,
+},
+
 });
