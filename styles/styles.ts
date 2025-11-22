@@ -350,4 +350,119 @@ hobbyDescription: {
   lineHeight: 20,
 },
 
+  goalItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.white,
+  },
+  checkboxContainer: {
+    paddingTop: 2,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#ddd',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  checkboxChecked: {
+    backgroundColor: '#4CAF50',
+    borderColor: '#4CAF50',
+  },
+  goalContent: {
+    flex: 1,
+  },
+  goalTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
+  },
+  goalTitleCompleted: {
+    color: '#999',
+    textDecorationLine: 'line-through',
+  },
+  goalDescription: {
+    fontSize: 14,
+    color: '#666',
+  },
+  goalDescriptionCompleted: {
+    color: '#aaa',
+    textDecorationLine: 'line-through',
+  },
+  progressContainer: {
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  progressText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
+   addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f9f0',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    gap: 8,
+  },
+  addButtonText: {
+    color: '#4CAF50',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+   emptyContainer: {
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#999',
+    fontStyle: 'italic',
+    marginBottom: 12,
+  },
+   bulletContainer: {
+    paddingTop: 2,
+    marginRight: 12,
+  },
+  bullet: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#4CAF50',
+  },
+  goalText: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 22,
+  },
+  deleteButton: {
+    padding: 8,
+    marginLeft: 8,
+  },
+  footer: {
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  countText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
+
 });
