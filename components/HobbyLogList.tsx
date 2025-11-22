@@ -4,7 +4,7 @@ import { useHobbyStore } from '@/stores/hobbyStore'
 import { styles } from '@/styles/styles'
 import Slider from "@react-native-community/slider"
 import React from 'react'
-import { Alert, Button, FlatList, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Button, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { axiosInstance } from '../lib/axios'
 
 
@@ -67,49 +67,39 @@ export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
 
 
    return (
-    <View>
-      <FlatList
-        data={[{ id: 'create-card', description: '', title: '' }, ...hobbyLogs]}
-        ListEmptyComponent={<Text>No Logs Created</Text>}
-        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        
-        renderItem={({ item }) => {
-          if (item.id === 'create-card') {
-            return (
-              <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <View style={[styles.hobbyCard, { justifyContent: 'center', alignItems: 'center' }]}>
-                  <Text style={styles.hobbyName}>+ Create New Log</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }
+     <View style={{ paddingBottom: 20 }}>
+      {/* Create button */}
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <View style={[styles.hobbyCard, { justifyContent: 'center', alignItems: 'center' }]}>
+          <Text style={styles.hobbyName}>+ Create New Log</Text>
+        </View>
+      </TouchableOpacity>
 
-          return (
-            <View style={styles.hobbyCard}>
-              <Text style={styles.hobbyName}>{item.description}</Text>
-              <Text>{item.description}</Text>
-            </View>
-          );
-        }}
-      />
+      {/* Render logs directly */}
+      {hobbyLogs.length > 0 ? (
+        hobbyLogs.map((item, index) => (
+          <View key={item.id ?? index} style={styles.hobbyCard}>
+            <Text style={styles.hobbyName}>{item.description}</Text>
+            <Text>{item.description}</Text>
+          </View>
+        ))
+      ) : (
+        <Text>No Logs Created</Text>
+      )}
 
-      
+      {/* Modal */}
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.sectionTitleBlack}>New Hobby Log</Text>
-            <Slider
-            minimumValue={1}
-            maximumValue={10}
-            />
+            <Slider minimumValue={1} maximumValue={10} />
             <TextInput
               placeholder="Description"
               value={newDescription}
               onChangeText={setNewDescription}
               style={styles.descriptionInput}
               numberOfLines={5}
-              multiline={true}
+              multiline
               textAlignVertical='top'
             />
             <Button title="Create" onPress={handleCreateLog} />
