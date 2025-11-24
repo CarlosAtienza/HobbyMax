@@ -63,7 +63,7 @@ export default function UserScreen() {
         keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={<Text style={{ textAlign: 'center', marginTop: 20 }}>No Hobbies Created</Text>}
-        contentContainerStyle={{ paddingBottom: 50, paddingHorizontal: 10, marginTop: 10 }}
+        contentContainerStyle={{ paddingBottom: 50, paddingHorizontal: 10, }}
         renderItem={({ item }) => (
           <TouchableOpacity
           onPress={() => {
@@ -89,6 +89,12 @@ export default function UserScreen() {
             />
             <View style={styles.hobbyInfo}>
               <Text style={styles.hobbyName}>{item.name}</Text>
+              <View style={{ flexDirection: 'row', marginTop: 4, gap: 12 }}>
+                <Text style={styles.hobbyStats}>
+                  Level {item.level || 0}
+                </Text>
+                
+              </View>
             </View>
           </View>
         </TouchableOpacity>

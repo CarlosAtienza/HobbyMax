@@ -256,6 +256,7 @@ searchCard: {
   },
   calendarContainer: {
     marginTop: 20,
+    marginBottom: 20,
   },
   weekHeader: {
     fontSize: 22,
@@ -464,5 +465,29 @@ hobbyDescription: {
     color: '#666',
     fontWeight: '500',
   },
+  hobbyStats: {
+  fontSize: 13,
+  color: '#666',
+  fontWeight: '500',
+},
+successMessage: {
+  fontSize: 16,
+  color: '#333',
+  textAlign: 'center',
+  marginBottom: 10,
+},
+xpText: {
+  fontSize: 28,
+  fontWeight: 'bold',
+  color: '#7F7FD5',
+  textAlign: 'center',
+},
+levelUpText: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: '#FFD700',
+  textAlign: 'center',
+  marginTop: 10,
+},
 
 });
