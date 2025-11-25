@@ -1,5 +1,6 @@
 import AddGoalModal from '@/components/AddGoalModal';
-import GoalsList from '@/components/GoalList';
+import GoalsList from '@/components/HobbyId/GoalList';
+import HabitList from '@/components/HobbyId/HabitList';
 import HobbyLogList from '@/components/HobbyLogList';
 import { HobbyResponseDTO } from '@/models/api';
 import { useAuthStore } from '@/stores/authStore';
@@ -7,11 +8,11 @@ import { useHobbyLogStore } from '@/stores/hobbyLogStore';
 import { useHobbyStore } from '@/stores/hobbyStore';
 
 import { COLORS } from '@/constants/theme';
+import { axiosInstance } from '@/lib/axios';
 import { styles } from '@/styles/styles';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useMemo } from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
-
+import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function HobbyDetails() {
   
@@ -43,15 +44,43 @@ export default function HobbyDetails() {
 
 
   const handleAddGoal = async (description: string) => {
-
+    try {
+      if (description.trim() === '') {
+        Alert.alert('Validation Error', 'Goal description cannot be empty.');
+        return;
+      }
+      const response = await axiosInstance.put(`/hobbies/add-goal/${id}`, description, {
+        headers: {
+          'Content-Type': "text/plain", Authorization: `Bearer ${token}`
+        },
+      });
+      Alert.alert('Success', 'Goal added successfully!');
+    } catch (error) {
+      console.error('Error adding goal:', error);
+      Alert.alert('Error', 'There was an error adding the goal. Please try again.');
+    }
   }
 
-  const handleToggleGoal = (goalId: number) => {
-
+  const handleAddHabit = async (description: string) => {
+    try {
+      if (description.trim() === '') {
+        Alert.alert('Validation Error', 'Habit description cannot be empty.');
+        return;
+      }
+      const response = await axiosInstance.put(`/hobbies/add-habit/${id}`, description, {
+        headers: {
+          'Content-Type': "text/plain", Authorization: `Bearer ${token}`
+        },
+      });
+      Alert.alert('Success', 'Habit added successfully!');
+    } catch (error) {
+      console.error('Error adding habbit:', error);
+      Alert.alert('Error', 'There was an error adding the habit. Please try again.');
+    }
   }
 
 
- 
+ //TODO: DELETE HABIT FUNCTION and GOAL FUNCTION
 
 
 
@@ -70,10 +99,18 @@ export default function HobbyDetails() {
         </View>
       
       </View>
+      {hobby?.habits && (
+        <HabitList
+          habits={hobby?.habits ?? []}
+          onAddHabit={() => setShowAddGoalModal(true)}  
+          //onDeleteHabit={handleDeleteHabit}
+        />
+
+      )}
+
        {hobby?.goals && (
         <GoalsList 
           goals={hobby.goals} 
-          onToggleGoal={handleToggleGoal}
           onAddGoal={() => setShowAddGoalModal(true)}
         />
       )}

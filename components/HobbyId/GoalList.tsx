@@ -11,7 +11,7 @@ interface GoalsListProps {
   onAddGoal?: () => void;
 }
 
-export default function GoalList({ goals, onToggleGoal, onDeleteGoal, onAddGoal }: GoalsListProps) {
+export default function GoalList({ goals, onDeleteGoal, onAddGoal }: GoalsListProps) {
     if (!goals || goals.length === 0) {
         return (
            <View style={styles.emptyContainer}>
