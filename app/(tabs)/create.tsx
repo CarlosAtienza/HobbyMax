@@ -1,3 +1,5 @@
+import GoalInput from '@/components/createComponents/GoalInput';
+import HabitInput from '@/components/createComponents/HabitInput';
 import { COLORS } from '@/constants/theme';
 import { axiosInstance } from '@/lib/axios';
 import { HobbyRequestDTO } from '@/models/api';
@@ -9,9 +11,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import {
   Alert,
-  Button,
   Dimensions,
-  FlatList,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -38,7 +38,7 @@ type Goal = {
      const { hobbies, setHobbies } = useHobbyStore();
      const { token, userId } = useAuthStore();
      const screenHeight = Dimensions.get('window').height;
-     const [experienceLevel, setExperienceLevel] = React.useState<'Beginner' | 'Intermediate' | 'Advanced'>('Beginner');
+     const [habits, setHabits] = React.useState<string[]>([]);
      const [goals, setGoals] = React.useState<{ id: string, value: string }[]>([]);
      const [goalInput, setGoalInput] = React.useState<string>('')
      const [step, setStep] = React.useState(1);
@@ -69,7 +69,7 @@ type Goal = {
 
          const newHobby: HobbyRequestDTO = {
              name: hobbyName,
-             description: hobbyDescription,
+             
          };
 
         formData.append("name", hobbyName);
@@ -126,6 +126,10 @@ type Goal = {
       setGoalInput('');
      }
 
+     const deleteGoalHandler = (id: string) => {
+      setGoals(goals.filter(goal => goal.id !== id));
+     }
+
 
    
  
@@ -143,6 +147,7 @@ type Goal = {
 
       {step ===1 && (
         <>
+
           <TouchableOpacity
               onPress={() => {
                 if (!hobbyName.trim() || !hobbyDescription.trim()) {
@@ -208,64 +213,17 @@ type Goal = {
 
       {step === 2 && (
         <>
-          <TouchableOpacity
-              onPress={() => {
-                setStep(1);
-              }}
-              style={{
-                alignSelf: 'flex-start',
-                marginBottom: 20,
-                padding: 10,
-                backgroundColor: COLORS.primary,
-                borderRadius: 8,
-              }}
-            >
-          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Back</Text>
-          </TouchableOpacity>
+          
+          <HabitInput habits={habits} setHabits={setHabits} />
+          <GoalInput goals={goals} setGoals={setGoals} />
 
-          <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 10 }}>Experience Level</Text>
-          {['Beginner', 'Intermediate', 'Advanced'].map(level => (
-            <TouchableOpacity
-              key={level}
-              onPress={() => setExperienceLevel(level as any)}
-              style={{
-                padding: 12,
-                backgroundColor: experienceLevel === level ? COLORS.primary : COLORS.gray,
-                borderRadius: 8,
-                marginBottom: 8,
-              }}
-            >
-              <Text style={{ color: '#fff', textAlign: 'center' }}>{level}</Text>
-            </TouchableOpacity>
-          ))}
-        <View style={styles.goalContainer}>
-          <TextInput
-            style={[styles.input, { marginBottom: 12, height: 80 }]}
-            placeholder="Your Goal (e.g., read 3 books/week)"
-            placeholderTextColor={COLORS.black}
-            value={goalInput}
-            onChangeText={setGoalInput}
-          />
-          <Button title="Add" onPress={addGoalHandler}/>
-          </View>
-          <FlatList<Goal>
-            data={goals}
-            keyExtractor={(item) => item.id}
-            renderItem={ ({ item }) => (
-              <View>
-                <Text>{item.value}</Text>
-              </View>
-            )}
-          />
-
-
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
             <TouchableOpacity onPress={() => setStep(1)} style={[styles.button, { flex: 0.45 }]}>
-              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>Back</Text>
+              <Text style={{ color: "#fff", textAlign: "center", fontWeight: "600" }}>Back</Text>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={createNewHobby} style={[styles.button, { flex: 0.45 }]}>
-              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>Create Hobby</Text>
+              <Text style={{ color: "#fff", textAlign: "center", fontWeight: "600" }}>Create Hobby</Text>
             </TouchableOpacity>
           </View>
         </>

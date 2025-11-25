@@ -4,18 +4,18 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { Data } from './data';
 import type { HobbyLogResponseDTO } from './hobbyLogResponseDTO';
 
 export interface HobbyResponseDTO {
   id?: number;
   name?: string;
-  description?: string;
   totalXp?: number;
   level?: number;
-  createdAt?: Data;
+  createdAt?: string;
   currentStreak?: number;
   longestStreak?: number;
   logs?: HobbyLogResponseDTO[];
+  goals?: string[];
   hobbyImage?: string;
+  habits?: string[];
 }

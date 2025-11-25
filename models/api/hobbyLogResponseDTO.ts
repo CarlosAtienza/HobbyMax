@@ -12,4 +12,6 @@ export interface HobbyLogResponseDTO {
   xpEarned?: number;
   hobbyId?: number;
   leveledUp?: boolean;
+  completedGoals?: string[];
+  message?: string;
 }

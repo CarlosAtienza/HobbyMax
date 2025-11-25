@@ -4,8 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ConnectionResponseDTOStatus } from './connectionResponseDTOStatus';
 import type { UserResponseDTO } from './userResponseDTO';
+import type { ConnectionResponseDTOStatus } from './connectionResponseDTOStatus';
 
 export interface ConnectionResponseDTO {
   id?: number;

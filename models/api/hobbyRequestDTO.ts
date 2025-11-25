@@ -7,6 +7,7 @@
 
 export interface HobbyRequestDTO {
   name?: string;
-  description?: string;
   userId?: number;
+  goals?: string[];
+  habits?: string[];
 }

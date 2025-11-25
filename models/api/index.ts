@@ -10,7 +10,6 @@ export * from './connectionRequestDTO';
 export * from './connectionResponseDTO';
 export * from './connectionResponseDTOStatus';
 export * from './createHobbyBody';
-export * from './data';
 export * from './hobbyLogRequestDTO';
 export * from './hobbyLogResponseDTO';
 export * from './hobbyRequestDTO';
