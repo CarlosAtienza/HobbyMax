@@ -4,8 +4,8 @@ import { useConnectionStore } from "@/stores/connectionStores";
 import { useHobbyStore } from "@/stores/hobbyStore";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 
 export default function Profile() {
@@ -14,6 +14,7 @@ export default function Profile() {
   const hobbies = useHobbyStore((state) => state.hobbies);
   const { connections, fetchConnectionsByUserId } = useConnectionStore();
   const { userId, token } = useAuthStore();
+  const [activeTab, setActiveTab] = useState('connections');
 
   useEffect(() => {
       const loadConnections = async () => {
@@ -25,7 +26,24 @@ export default function Profile() {
           console.log("Failed to fetch connections")
         }
       }
+      loadConnections();
   }, [userId, token])
+
+  const handleAcceptConnection = async (connectionId: string) => {
+    try {
+
+    } catch (err){
+      console.log("Failed to accept connection");
+    }
+  }
+
+  const handleRejectConnection = async (connectionId: string) => {
+    try {
+
+    } catch (err) {
+      console.log("Failed to reject connection");
+    }
+  }
 
   if (!user) {
     return (
@@ -35,9 +53,11 @@ export default function Profile() {
     );
   }
 
+
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Profile Header */}
+    <>
+
       <View style={styles.header}>
       <Image
         source={
@@ -58,14 +78,23 @@ export default function Profile() {
       </TouchableOpacity>
       
       </View>
-       {/* Overview Section */}
+  
+      {/* Overview Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Overview</Text>
         <Text style={styles.sectionText}>Total Hobbies: {hobbies.length}</Text>
-        {/* <Text style={styles.sectionText}>Connections: {connections.length}</Text> */}
-        <Text style={styles.sectionText}>XP Level: Coming soon 🚀</Text>
+        <Text style={styles.sectionText}>Current Streak: {4}</Text>
+        <Text style={styles.sectionText}>Connections: {connections?.length || 0}</Text>
       </View>
-    </ScrollView>
+
+      {/* Tab Naviation */}
+      <View style={styles.tabContainer}>
+        <TouchableOpacity>
+
+        </TouchableOpacity>
+
+      </View>
+   </>
   );
 }
 
@@ -130,6 +159,52 @@ export const styles = StyleSheet.create({
     color: "#444",
   },
 
+  // Tab Navigation
+  tabContainer: {
+    flexDirection: "row",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 12,
+    padding: 4,
+    marginVertical: 10,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  activeTab: {
+    backgroundColor: COLORS.primary,
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#666",
+  },
+  activeTabText: {
+    color: COLORS.white,
+  },
+  badge: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    backgroundColor: "#ff4444",
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 6,
+  },
+  badgeText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+
   // Connections section
   connectionCard: {
     flexDirection: "row",
@@ -153,6 +228,54 @@ export const styles = StyleSheet.create({
   hobbyCountText: {
     fontSize: 14,
     color: "#aaa",
+  },
+   // Pending Requests
+  pendingCard: {
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+  },
+  pendingHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  messageText: {
+    fontSize: 13,
+    color: "#666",
+    fontStyle: "italic",
+    marginTop: 4,
+  },
+  actionButtons: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  acceptButton: {
+    flex: 1,
+    backgroundColor: "#4CAF50",
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  acceptButtonText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  rejectButton: {
+    flex: 1,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  rejectButtonText: {
+    color: "#666",
+    fontSize: 15,
+    fontWeight: "600"
   },
 
   // Loading / fallback
