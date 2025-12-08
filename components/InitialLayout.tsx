@@ -1,9 +1,8 @@
 
+import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/stores/authStore";
-import { useUserStore } from "@/stores/userStore";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "../lib/axios";
 
 export default function InitialLayout() {
 
@@ -12,10 +11,9 @@ export default function InitialLayout() {
     const [isLoaded, setIsLoaded] = useState(false);
    
 
-    const { token, loadToken, userId, logout } = useAuthStore();
-    const { setUser } = useUserStore();
+    const { token, loadToken, userId, logout, setUser } = useAuthStore();
 
-   
+  
 
     useEffect(() => {
         

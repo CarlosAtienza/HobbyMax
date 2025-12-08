@@ -1,7 +1,6 @@
 import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/stores/authStore";
-import { useUserStore } from "@/stores/userStore";
 import { styles } from "@/styles/styles";
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,8 +17,8 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
-  const { loadToken, userId } = useAuthStore();
-  const { setUser } = useUserStore();
+  const { loadToken, userId, setUser } = useAuthStore();
+  
   
 
   const pickImage = async () => {

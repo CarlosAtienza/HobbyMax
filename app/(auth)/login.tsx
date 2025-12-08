@@ -1,7 +1,6 @@
 import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/stores/authStore";
-import { useUserStore } from "@/stores/userStore";
 import { styles } from "@/styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -14,8 +13,8 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { loadToken } = useAuthStore();
-  const { setUser } = useUserStore();
+  const { loadToken, setUser } = useAuthStore();
+  
 
   const handleLogin = async () => {
 
