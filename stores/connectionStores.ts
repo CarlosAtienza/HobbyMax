@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import { ConnectionResponseDTO } from "@/types";
+import { ConnectionResponseDTO } from "@/models/api";
 import { create } from "zustand";
 
 interface ConnectionState{
@@ -19,12 +19,18 @@ export const useConnectionStore = create<ConnectionState>((set) => ({
     setPendingConnections: (pendingConnections) => set({ pendingConnections }),
     fetchConnectionsByUserId: async (userId: number, token: string) => {
         try {
-            const response = await axiosInstance.get(`/connections/user/${userId}`, {
+            const response = await axiosInstance.get(`/connection/user/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             set({ connections: response.data });
-        } catch (err) {
-            console.log("Failed to fetch connections");
+            
+        } catch (err: any) {
+            console.log("Failed to fetch connections", {
+                message: err.mesage,
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+            throw err;
         }
     },
     fetchPendingConnectionsByUserId: async (userId: number, token: string) => {

@@ -12,7 +12,6 @@ import type {
 
 import type {
   SearchUsersParams,
-  UserRequestDTO,
   UserResponseDTO
 } from '../../models/api';
 
@@ -25,15 +24,6 @@ import type {
  ): Promise<TData> => {
     return axios.get(
       `/api/users/${id}`,options
-    );
-  }
-export const updateUser = <TData = AxiosResponse<UserResponseDTO>>(
-    id: number,
-    userRequestDTO: UserRequestDTO, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/api/users/${id}`,
-      userRequestDTO,options
     );
   }
 export const getUserByUsername = <TData = AxiosResponse<UserResponseDTO>>(
@@ -53,6 +43,5 @@ export const searchUsers = <TData = AxiosResponse<UserResponseDTO[]>>(
     );
   }
 export type GetUserResult = AxiosResponse<UserResponseDTO>
-export type UpdateUserResult = AxiosResponse<UserResponseDTO>
 export type GetUserByUsernameResult = AxiosResponse<UserResponseDTO>
 export type SearchUsersResult = AxiosResponse<UserResponseDTO[]>

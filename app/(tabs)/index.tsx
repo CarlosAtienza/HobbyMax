@@ -23,7 +23,9 @@ export default function UserScreen() {
   const { hobbies, setHobbies, fetchHobbiesByUserId } = useHobbyStore();
   const[loading, setLoading] = React.useState(false);
   const { setWeeklyLogs } = useHobbyLogStore();
+  const { user } = useAuthStore();
   const router = useRouter();
+  
   
   useEffect(() => {
     const fetchWeeklyLogs = async () => {
@@ -52,6 +54,8 @@ export default function UserScreen() {
       </View>
     );
   }
+
+  console.log(user);
   
 
   return (

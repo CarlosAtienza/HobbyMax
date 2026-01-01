@@ -18,5 +18,4 @@ export * from './loginRequest';
 export * from './refreshAccessTokenBody';
 export * from './registerBody';
 export * from './searchUsersParams';
-export * from './userRequestDTO';
 export * from './userResponseDTO';

@@ -23,7 +23,7 @@ import type {
     hobbyLogRequestDTO: HobbyLogRequestDTO, options?: AxiosRequestConfig
  ): Promise<TData> => {
     return axios.post(
-      `/api/hobby-logs`,
+      `/api/hobby-logs/create`,
       hobbyLogRequestDTO,options
     );
   }

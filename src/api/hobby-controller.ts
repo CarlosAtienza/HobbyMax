@@ -12,7 +12,6 @@ import type {
 
 import type {
   CreateHobbyBody,
-  HobbyRequestDTO,
   HobbyResponseDTO
 } from '../../models/api';
 
@@ -20,20 +19,22 @@ import type {
 
 
 
-  export const updateHobby = <TData = AxiosResponse<HobbyResponseDTO>>(
-    id: number,
-    hobbyRequestDTO: HobbyRequestDTO, options?: AxiosRequestConfig
+  export const addHabit = <TData = AxiosResponse<HobbyResponseDTO>>(
+    hobbyId: number,
+    addHabitBody: string, options?: AxiosRequestConfig
  ): Promise<TData> => {
     return axios.put(
-      `/api/hobbies/${id}`,
-      hobbyRequestDTO,options
+      `/api/hobbies/add-habit/${hobbyId}`,
+      addHabitBody,options
     );
   }
-export const deleteHobby = <TData = AxiosResponse<void>>(
-    id: number, options?: AxiosRequestConfig
+export const addGoal = <TData = AxiosResponse<HobbyResponseDTO>>(
+    hobbyId: number,
+    addGoalBody: string, options?: AxiosRequestConfig
  ): Promise<TData> => {
-    return axios.delete(
-      `/api/hobbies/${id}`,options
+    return axios.put(
+      `/api/hobbies/add-goal/${hobbyId}`,
+      addGoalBody,options
     );
   }
 export const createHobby = <TData = AxiosResponse<HobbyResponseDTO>>(
@@ -74,9 +75,17 @@ export const getAllHobbies = <TData = AxiosResponse<HobbyResponseDTO[]>>(
       `/api/hobbies/all/${userId}`,options
     );
   }
-export type UpdateHobbyResult = AxiosResponse<HobbyResponseDTO>
-export type DeleteHobbyResult = AxiosResponse<void>
+export const deleteHobby = <TData = AxiosResponse<void>>(
+    id: number, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.delete(
+      `/api/hobbies/${id}`,options
+    );
+  }
+export type AddHabitResult = AxiosResponse<HobbyResponseDTO>
+export type AddGoalResult = AxiosResponse<HobbyResponseDTO>
 export type CreateHobbyResult = AxiosResponse<HobbyResponseDTO>
 export type GetHobbyByIdResult = AxiosResponse<HobbyResponseDTO>
 export type HelloWorldResult = AxiosResponse<string>
 export type GetAllHobbiesResult = AxiosResponse<HobbyResponseDTO[]>
+export type DeleteHobbyResult = AxiosResponse<void>

@@ -13,7 +13,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { loadToken, setUser } = useAuthStore();
+  const { loadToken, setUser, user } = useAuthStore();
   
 
   const handleLogin = async () => {
@@ -44,7 +44,7 @@ export default function Login() {
             });
 
       setUser(userResponse.data);
-
+      
       router.replace("/(tabs)");
       
     } catch (error: any) {

@@ -19,7 +19,7 @@ import type {
 
 
 
-  export const declineRequest = <TData = AxiosResponse<ConnectionResponseDTO>>(
+  export const declineRequest = <TData = AxiosResponse<void>>(
     id: number, options?: AxiosRequestConfig
  ): Promise<TData> => {
     return axios.post(
@@ -55,7 +55,7 @@ export const getPendingRequests = <TData = AxiosResponse<ConnectionResponseDTO[]
       `/api/connection/user/${userId}/pending`,options
     );
   }
-export type DeclineRequestResult = AxiosResponse<ConnectionResponseDTO>
+export type DeclineRequestResult = AxiosResponse<void>
 export type AcceptRequestResult = AxiosResponse<ConnectionResponseDTO>
 export type SendRequestResult = AxiosResponse<ConnectionResponseDTO>
 export type GetConnectionsForUserResult = AxiosResponse<ConnectionResponseDTO[]>

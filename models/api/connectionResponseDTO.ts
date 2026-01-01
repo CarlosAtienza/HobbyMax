@@ -9,7 +9,8 @@ import type { ConnectionResponseDTOStatus } from './connectionResponseDTOStatus'
 
 export interface ConnectionResponseDTO {
   id?: number;
-  user?: UserResponseDTO;
+  otherUser?: UserResponseDTO;
   status?: ConnectionResponseDTOStatus;
+  initiatedByMe?: boolean;
   createdAt?: string;
 }
