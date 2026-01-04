@@ -1,4 +1,3 @@
-import { AuthResponseDTO } from '@/models/api';
 import { useAuthStore } from '@/stores/authStore';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
@@ -8,65 +7,117 @@ export const axiosInstance = axios.create({
   
 });
 
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value?: any) => void;
+  reject: (reason?: any) => void;
+}> = [];
 
-// axiosInstance.interceptors.request.use(
-//   (config) => {
-//     const token = useAuthStore.getState().token;
-//     console.log("Attaching token to request:", token);
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  
+  failedQueue = [];
+};
 
+// Request interceptor to attach the token
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = useAuthStore.getState().token;
+    
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+
+// Response Interceptor that handles token refresh
 axiosInstance.interceptors.response.use(
-  response => response, // Directly return successful responses.
+  
+  (response) => response, // Directly return successful responses.
   async error => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    console.log("HEELLLLLLOOOOOOO");
+    const originalRequest = error.config as any;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      console.log("HI")
       originalRequest._retry = true; // Mark the request as retried to avoid infinite loops.
+      //If another request already started, refresh and retry
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(token => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return axiosInstance(originalRequest);
+          })
+            .catch(err => Promise.reject(err));
+      }
+      originalRequest._retry = true;
+      isRefreshing = true;
+
       try {
         const refreshToken = await SecureStore.getItemAsync('refreshToken');
-        const { loadToken, setToken, logout } = useAuthStore.getState();
 
-        if (!refreshToken) {
-          logout();
-          return Promise.reject('No refresh token available');
+        if (!refreshToken){
+          console.log('No refresh token available');
+          throw new Error('No refresh token available');
         }
+        console.log("trying to hit refresh endpoint");
+        const response = await axios.post(
+          `${process.env.EXPO_PUBLIC_BASE_URL}/auth/refresh`,
+          { refreshToken },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
+        const { token, refreshToken: newRefreshToken, userId } = response.data;
+        console.log("Token: ", refreshToken);
+        await Promise.all([
+          SecureStore.setItemAsync('token', token),
+          SecureStore.setItemAsync('refreshToken', newRefreshToken),
+        ]);
 
-        // Make a request to your auth server to refresh the token.
-        const response = await axiosInstance.post('auth/refresh',{ 
-          refreshToken,
-        });
+        useAuthStore.setState({
+          token,
+          refreshToken: newRefreshToken,
+          userId: Number(userId),
+          isAuthenticated: true,
+        })
+        
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        originalRequest.headers.Authorization = `Bearer ${token}`;
 
-        const authResponse: AuthResponseDTO = {
-          token: response.data.token,
-          refreshToken: response.data.refreshToken,
-          userId: response.data.userId,
-          username: response.data.username
-        };
+        // Process queued requests
+        processQueue(null, token);
 
-
-        // Store the new access and refresh tokens.
-        SecureStore.setItemAsync('token', authResponse.token ?? '');
-        SecureStore.setItemAsync('refreshToken', authResponse.refreshToken ?? '');
-        setToken(authResponse.token ?? '');
-      
-        // Update the authorization header with the new access token.
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${authResponse.token ?? ''}`;
-        return axiosInstance(originalRequest); // Retry the original request with the new access token.
+        // Retry original request
+        return axiosInstance(originalRequest);
 
       } catch (refreshError) {
-        // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
-        console.error('Token refresh failed:', refreshError);
+        //Token refresh failed, logout user
+        processQueue(refreshError, null);
         const { logout } = useAuthStore.getState();
-        logout();
+        await logout();
+
         return Promise.reject(refreshError);
+
+      } finally {
+          isRefreshing = false;
       }
     }
-    return Promise.reject(error); // For all other errors, return the error as is.
+      return Promise.reject(error);
   }
+  
 );
