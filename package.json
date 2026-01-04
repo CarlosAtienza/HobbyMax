@@ -9,7 +9,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "gen:types": "orval --config orval.config.ts"
+    "gen:types": "orval --config orval.config.ts",
+    "typecheck": "tsc --noEmit",
+    "format:write": "prettier --write .",
+    "format:check": "prettier --check ."
+    
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.14.30",
@@ -62,6 +66,7 @@
     "eslint-config-expo": "~10.0.0",
     "expo": "~54.0.26",
     "orval": "^7.13.0",
+    "prettier": "^3.7.4",
     "typescript": "~5.9.2"
   },
   "private": true
