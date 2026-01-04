@@ -4,7 +4,6 @@ import { useAuthStore } from "@/stores/authStore";
 import { styles } from "@/styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store";
 import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -13,7 +12,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { loadToken, setUser, user } = useAuthStore();
+  const { setTokens, setUser } = useAuthStore();
   
 
   const handleLogin = async () => {
@@ -32,18 +31,25 @@ export default function Login() {
 
       console.log("Login success:", response.data);
       
-      const { token, userId } = response.data;
+      const { token, refreshToken, userId } = response.data;
 
-      await SecureStore.setItemAsync("token", token);
-      await SecureStore.setItemAsync("userId", userId.toString());
-      await loadToken();
+     
       
-
+      //Fetch user profile data
       const userResponse = await axiosInstance.get(`/users/${userId}`, {
               headers: { Authorization: `Bearer ${token}`},
             });
 
-      setUser(userResponse.data);
+      //Save tokens and user data to store
+      await setTokens(
+        token,
+        refreshToken,
+      );
+
+      await setUser(userResponse.data, userId.toString());
+
+
+     
       
       router.replace("/(tabs)");
       

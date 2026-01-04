@@ -5,7 +5,6 @@ import { styles } from "@/styles/styles";
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import * as SecureStore from 'expo-secure-store';
 import React, { useState } from "react";
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -17,7 +16,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
-  const { loadToken, userId, setUser } = useAuthStore();
+  const { setTokens, userId, setUser } = useAuthStore();
   
   
 
@@ -72,15 +71,8 @@ export default function Register() {
         },
       });
 
-      const { token, userId } = response.data;
-
-      console.log("Received token:", token);
+      const { token, refreshToken, userId } = response.data;
       
-      await SecureStore.setItemAsync("token", token); 
-      await SecureStore.setItemAsync("userId", userId.toString());
-      console.log("Register success:", response.data.username);
-      
-
       //Fetching user data to store
       const userResponse = await axiosInstance.get(`/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}`},
@@ -88,9 +80,13 @@ export default function Register() {
 
       console.log("Fetched User: ", userResponse.data.username);
 
-      setUser(userResponse.data);
-      
-      await loadToken();
+       //Save tokens and user data to store
+      await setTokens(
+        token,
+        refreshToken,
+      );
+
+      await setUser(userResponse.data, userId.toString());
 
 
       router.replace("/(tabs)");
