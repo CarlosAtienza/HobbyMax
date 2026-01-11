@@ -17,6 +17,7 @@ interface AuthState {
     user: UserResponseDTO | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+    isTokenValidated: boolean;
 
     isTokenExpired: () => boolean;
     getTokenExpirationTime: () => number | null; 
@@ -38,7 +39,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     userId: null,
     isAuthenticated: false,
     isLoading: true,
-    
+    isTokenValidated: false,
 
     // Check if token is expired
   isTokenExpired: () => {
@@ -103,6 +104,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                     user: userStr ? JSON.parse(userStr) : null,
                     isAuthenticated: true,
                     isLoading: false,
+                    isTokenValidated: true,
 
                 });
                 console.log(get().isAuthenticated);
@@ -133,9 +135,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             throw error;
         }
   },
-    setUser: async (user: UserResponseDTO, userId: string) => {
+    setUser: async (user: UserResponseDTO, userId: number | string) => {
         await SecureStore.setItemAsync("user", JSON.stringify(user));
-        await SecureStore.setItemAsync("userId", userId)
+        await SecureStore.setItemAsync("userId", String(userId))
         set({ user });
         set({ userId: Number(userId) });
     },

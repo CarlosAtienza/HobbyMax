@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 
 export const useUserSync = () => {
-  const { token, isAuthenticated, user, setUser, logout } = useAuthStore();
+  const { token, isAuthenticated, user, userId, setUser, logout } = useAuthStore();
   const isFetchingRef = useRef(false);
   const hasFetchedRef = useRef(false);
 
@@ -25,7 +25,9 @@ export const useUserSync = () => {
 
       try {
         // Fetch user profile from your API
-        const response = await axiosInstance.get('/user/profile'); // Adjust endpoint as needed
+         const response = await axiosInstance.get(`/users/${userId}`, {
+                headers: { Authorization: `Bearer ${token}`},
+              });
         
         console.log('[UserSync] User data fetched successfully');
         setUser(response.data, response.data.userId);

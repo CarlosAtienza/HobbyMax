@@ -96,24 +96,43 @@ export default function Profile() {
       </View>
 
       {/* Connection List */}
-      {activeTab === "connections" ? (
+     {activeTab === "connections" ? (
         connections && connections.length > 0 ? (
           connections.map((conn) => (
-            <View key={conn.id} style={styles.connectionCard}>
-              <Image source={{ uri: conn.otherUser?.profilePhoto }} style={styles.connectionAvatar} />
-              <Text style={styles.connectionName}>{conn.otherUser?.username}</Text>
-            </View>
+            
+            <TouchableOpacity
+              key={conn.id}
+              style={styles.connectionCard}
+              onPress={() =>
+                router.push({
+                  pathname: "/profile/[id]",
+                  params: { id: String(conn.otherUser!.id) },
+                })
+              }
+              activeOpacity={0.7}
+            >
+              <Image
+                source={{ uri: conn.otherUser?.profilePhoto }}
+                style={styles.connectionAvatar}
+              />
+              <Text style={styles.connectionName}>
+                {conn.otherUser?.username}
+              </Text>
+            </TouchableOpacity>
           ))
         ) : (
-          <Text style={{ textAlign: "center", marginTop: 20 }}>You have no connections yet.</Text>
+          <Text style={{ textAlign: "center", marginTop: 20 }}>
+            You have no connections yet.
+          </Text>
         )
       ) : (
-        <Text style={{ textAlign: "center", marginTop: 20 }}>No pending requests.</Text>
+        <Text style={{ textAlign: "center", marginTop: 20 }}>
+          No pending requests.
+        </Text>
       )}
     </ScrollView>
   );
 }
-
 
 export const styles = StyleSheet.create({
   container: {
