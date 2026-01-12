@@ -6,12 +6,14 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+//TODO: When connection is clicked, it failes to fetch, but afterwards, it loads, and only the no hobbies created shows up
+
 export default function UserProfile() {
     const router = useRouter();
     const { viewedProfile, viewedHobbies, isLoading, fetchProfile, clearProfile } = useProfileStore();
     const { userId: currentUserId, token } = useAuthStore();
     const { id } = useLocalSearchParams<{ id: string }>();
-    
+     
     useEffect(() => {
         if (id && token) {
             fetchProfile(id, token);
@@ -26,7 +28,7 @@ export default function UserProfile() {
 
     const renderHeader = () => {
 
-        if (isLoading || !viewedProfile) {
+        if (!viewedProfile) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <ActivityIndicator size="large" />
@@ -34,7 +36,8 @@ export default function UserProfile() {
         );
         }
 
-    
+    return (
+      <>
     <View style={styles.header}>
           <Image
             source={
@@ -52,10 +55,11 @@ export default function UserProfile() {
           {/* Overview Section */}
           <View style={profileStyles.sectionContainer}>
             <Text style={profileStyles.sectionTitle}>Overview</Text>
-            <Text style={profileStyles.sectionText}>Total Hobbies: {viewedHobbies!.length}</Text>
+            <Text style={profileStyles.sectionText}>Total Hobbies: {viewedHobbies?.length ?? 0}</Text>
             <Text style={profileStyles.sectionText}>Current Streak: {4}</Text>
           </View>
-    
+          </>
+    );    
     
         }
 
@@ -64,7 +68,7 @@ export default function UserProfile() {
 
   return (
        <FlatList
-            data={viewedHobbies}
+            data={viewedHobbies ?? []}
             keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
             ListHeaderComponent={renderHeader}
             ListEmptyComponent={<Text style={{ textAlign: 'center', marginTop: 20 }}>No Hobbies Created</Text>}
@@ -165,4 +169,4 @@ export const profileStyles = StyleSheet.create({
     color: "#444",
   },
 
-});
+});      
