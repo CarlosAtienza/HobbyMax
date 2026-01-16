@@ -52,7 +52,7 @@ export default function UserProfile() {
           {/* Overview Section */}
           <View style={profileStyles.sectionContainer}>
             <Text style={profileStyles.sectionTitle}>Overview</Text>
-            <Text style={profileStyles.sectionText}>Total Hobbies: {viewedHobbies.length}</Text>
+            <Text style={profileStyles.sectionText}>Total Hobbies: {viewedHobbies!.length}</Text>
             <Text style={profileStyles.sectionText}>Current Streak: {4}</Text>
           </View>
     
