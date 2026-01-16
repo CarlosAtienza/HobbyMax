@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
   },
   
   avatarText: {
-    color: "#666",
+    color: COLORS.gray,
     textAlign: "center",
     paddingHorizontal: 10,
   },
@@ -79,14 +79,14 @@ export const styles = StyleSheet.create({
   username: { 
     fontSize: 18, 
     fontWeight: "bold", 
-    color: "white" 
+    color: COLORS.white,
   },
   settingsButton: { 
     marginLeft: "auto" 
   },
   settingsText: { 
     fontSize: 22, 
-    color: "white" 
+    color: COLORS.white
   },
   header: {
     flexDirection: "row",
@@ -107,11 +107,11 @@ export const styles = StyleSheet.create({
   hobbyCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.white,
     borderRadius: 15,
     padding: 10,
     marginVertical: 8,
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -139,11 +139,11 @@ export const styles = StyleSheet.create({
   hobbyName: { 
     fontSize: 16, 
     fontWeight: "bold", 
-    color: "black" 
+    color: COLORS.black 
   },
   hobbyDetails: { 
     fontSize: 14, 
-    color: "gray" 
+    color: COLORS.gray
   },
 
   bottomNav: {
@@ -155,8 +155,8 @@ export const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
   },
-  navIcon: { fontSize: 22, color: "white" },
-  loadingText: { flex: 1, textAlign: "center", color: "white", marginTop: 50 },
+  navIcon: { fontSize: 22, color: COLORS.white },
+  loadingText: { flex: 1, textAlign: "center", color: COLORS.white, marginTop: 50 },
   hobbyList: {
     width: '100%',
     padding: 10,
@@ -185,7 +185,7 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     padding: 20,
     borderRadius: 10,
     marginTop: 100,
@@ -194,10 +194,10 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: 'black',
+    color: COLORS.black,
   },
   cancelButton: {
-    backgroundColor: 'red',
+    backgroundColor: COLORS.error,
     marginTop: 10,
     borderRadius: 12,
     height: 55,
@@ -275,7 +275,7 @@ searchCard: {
     width: 45,
   },
   todayButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: COLORS.primaryDark,
   },
   dayLabel: {
     fontSize: 12,
@@ -312,7 +312,7 @@ searchCard: {
     marginTop: 20,
   },
   closeButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: COLORS.primaryDark,
     padding: 10,
     borderRadius: 8,
     marginTop: 10,
@@ -479,7 +479,7 @@ successMessage: {
 xpText: {
   fontSize: 28,
   fontWeight: 'bold',
-  color: '#7F7FD5',
+  color: COLORS.primaryLight,
   textAlign: 'center',
 },
 levelUpText: {

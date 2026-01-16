@@ -51,7 +51,7 @@ type Goal = {
              return;
          }
          const result = await ImagePicker.launchImageLibraryAsync({
-             mediaTypes: ImagePicker.MediaTypeOptions.Images,
+             mediaTypes: ['images'],
              allowsEditing: true,
              aspect: [1, 1],
              quality: 0.5,
@@ -110,6 +110,10 @@ type Goal = {
          });
          Alert.alert("Success", "Hobby created successfully!");
          setHobbies([...hobbies, response.data]);
+
+         setHobbyName("");
+         setHobbyDescription("");
+         setHobbyImage("");
  
          router.push("/(tabs)");
  
@@ -172,7 +176,8 @@ type Goal = {
             <View>
               <Image
                 source={{ uri: hobbyImage }}
-                style={{ width: '100%', height: screenHeight * 0.0005, borderRadius: 12 }}
+                style={{ width: '100%', height: 250, borderRadius: 12 }}
+                resizeMode='cover'
               />
             </View>
           ) : (

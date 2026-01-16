@@ -1,6 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
 import { HobbyResponseDTO, UserResponseDTO } from "@/models/api";
-import { Alert } from "react-native";
 import { create } from "zustand";
 
 
@@ -24,11 +23,18 @@ export const useProfileStore = create<ProfileStore>((set, get) => ({
                  headers: { Authorization: `Bearer ${token}` }
             })
             if (response){
-                set({ viewedProfile: response.data, viewedHobbies: response.data.hobbies })
+                set({ viewedProfile: response.data, 
+                    viewedHobbies: response.data.hobbies, 
+                    isLoading: false, })
             }
         } catch (error) {
             console.log("Failed to fetch user");
-            Alert.alert("Failed to fetch user, try again later.")
+            set({
+                viewedProfile: null,
+                viewedHobbies: [],
+                isLoading: false,
+            });
+            throw error;
         }
     },
     clearProfile: () => set({ viewedProfile: null}),

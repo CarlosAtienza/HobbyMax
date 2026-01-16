@@ -15,25 +15,36 @@ export default function UserProfile() {
     const { id } = useLocalSearchParams<{ id: string }>();
      
     useEffect(() => {
-        if (id && token) {
-            fetchProfile(id, token);
-            if (!viewedProfile){
-                Alert.alert("Failed to load in user. Please try again");
-                router.push("/(tabs)/profile");
-            }
-        }
-        //cleanup when leaving screen
+        if (!id || !token) return;
+        const loadProfile = async () => {
+          try {
+            await fetchProfile(id, token);
+          } catch {
+            Alert.alert("Failed to load user. Please try again.");
+            router.push("/(tabs)/profile");
+          }
+        };
+        loadProfile();
+
         return () => clearProfile();
     }, [id, token]);
 
     const renderHeader = () => {
 
-        if (!viewedProfile) {
-        return (
+        if (isLoading) {
+          return (
+              <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <ActivityIndicator size="large" />
+              </View>
+          );
+        }
+
+        else if (!viewedProfile) {
+          return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <ActivityIndicator size="large" />
+              <Text>User not found.</Text>
             </View>
-        );
+          );
         }
 
     return (
