@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/lib/axios';
-import { HobbyLogResponseDTO, HobbyResponseDTO } from '@/types';
+import { HobbyLogResponseDTO, HobbyResponseDTO } from '@/models/api';
 import { create } from 'zustand';
 
 
