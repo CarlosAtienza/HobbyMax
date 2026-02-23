@@ -29,9 +29,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
-        <InitialLayout />
-      </SafeAreaView>
+     <InitialLayout/>
     </SafeAreaProvider>
   );
 }

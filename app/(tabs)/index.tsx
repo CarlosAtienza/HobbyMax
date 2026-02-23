@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 
 import CalendarWeek from '@/components/CalendarWeek';
+import SkillGraph from '@/components/SkillGraph';
+import { COLORS } from '@/constants/theme';
 import { axiosInstance } from '@/lib/axios';
 import { useHobbyLogStore } from '@/stores/hobbyLogStore';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -39,11 +41,12 @@ export default function UserScreen() {
   }, [userId, token])
   
   const renderHeader = () => (<>
-      <LinearGradient colors={['#7F7FD5', '#86A8E7', '#91EAE4']} style={styles.headerCard}>
+      <LinearGradient colors={[COLORS.primary, COLORS.primaryLight, '#91EAE4']} style={styles.headerCard}>
         <Text style={styles.header}>Welcome back!</Text>
         <Text style={styles.title}>Keep growing your hobbies 🌱</Text>
       </LinearGradient>
       <CalendarWeek />
+      {hobbies.length >= 3 && <SkillGraph hobbies={hobbies} />}
     </>
   );
 
