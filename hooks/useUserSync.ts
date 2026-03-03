@@ -37,7 +37,7 @@ export const useUserSync = () => {
         console.error('[UserSync] Failed to fetch user data:', error.message);
         
         // If it's an auth error, the interceptor will handle it
-        // If it's a different error, we can retry or logout depending on severity
+        // If it's a different error, we can retry or logout dew on severity
         if (error.response?.status === 404) {
           console.error('[UserSync] User not found, logging out');
           await logout();

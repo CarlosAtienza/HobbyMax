@@ -16,9 +16,10 @@ interface AddGoalModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (title: string, description: string) => Promise<void>;
+  title?: string;
 }
 
-export default function AddGoalModal({ visible, onClose, onSubmit }: AddGoalModalProps) {
+export default function AddGoalModal({ visible, onClose, onSubmit, title: modalTitle = 'Add New Goal' }: AddGoalModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,7 +62,7 @@ export default function AddGoalModal({ visible, onClose, onSubmit }: AddGoalModa
       >
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Add New Goal</Text>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
             <TouchableOpacity onPress={handleClose} disabled={isSubmitting}>
               <Ionicons name="close" size={24} color="#666" />
             </TouchableOpacity>
@@ -69,10 +70,10 @@ export default function AddGoalModal({ visible, onClose, onSubmit }: AddGoalModa
 
           <View style={styles.formContainer}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Goal Title *</Text>
+              <Text style={styles.label}>Title *</Text>
               <TextInput
                 style={styles.input}
-                placeholder="e.g., Practice 30 minutes daily"
+                placeholder="Enter title..."
                 value={title}
                 onChangeText={setTitle}
                 editable={!isSubmitting}
@@ -116,7 +117,7 @@ export default function AddGoalModal({ visible, onClose, onSubmit }: AddGoalModa
                 {isSubmitting ? (
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
-                  <Text style={styles.submitButtonText}>Add Goal</Text>
+                  <Text style={styles.submitButtonText}>Add</Text>
                 )}
               </TouchableOpacity>
             </View>

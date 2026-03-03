@@ -30,6 +30,11 @@ export default function UserScreen() {
   
   
   useEffect(() => {
+    if (!userId || !token) return;
+    fetchHobbiesByUserId(userId, token);
+  }, [userId, token]);
+
+  useEffect(() => {
     const fetchWeeklyLogs = async () => {
       if (!userId || !token) return;
       const response = await axiosInstance.get(`/hobby-logs/${userId}/logs/week`, {
