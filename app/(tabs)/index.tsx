@@ -1,34 +1,32 @@
-import { useAuthStore } from '@/stores/authStore';
-import { useHobbyStore } from '@/stores/hobbyStore';
-import { styles } from '@/styles/styles';
-import React, { useEffect } from 'react';
+import { useAuthStore } from "@/stores/authStore";
+import { useHobbyStore } from "@/stores/hobbyStore";
+import { styles } from "@/styles/styles";
+import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
   Image,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
+  View,
+} from "react-native";
 
-import CalendarWeek from '@/components/CalendarWeek';
-import SkillGraph from '@/components/SkillGraph';
-import { COLORS } from '@/constants/theme';
-import { axiosInstance } from '@/lib/axios';
-import { useHobbyLogStore } from '@/stores/hobbyLogStore';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-
+import CalendarWeek from "@/components/CalendarWeek";
+import SkillGraph from "@/components/SkillGraph";
+import { COLORS } from "@/constants/theme";
+import { axiosInstance } from "@/lib/axios";
+import { useHobbyLogStore } from "@/stores/hobbyLogStore";
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 
 export default function UserScreen() {
-  const {token, userId} = useAuthStore();
+  const { token, userId } = useAuthStore();
   const { hobbies, setHobbies, fetchHobbiesByUserId } = useHobbyStore();
-  const[loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const { setWeeklyLogs } = useHobbyLogStore();
   const { user } = useAuthStore();
   const router = useRouter();
-  
-  
+
   useEffect(() => {
     if (!userId || !token) return;
     fetchHobbiesByUserId(userId, token);
@@ -37,16 +35,23 @@ export default function UserScreen() {
   useEffect(() => {
     const fetchWeeklyLogs = async () => {
       if (!userId || !token) return;
-      const response = await axiosInstance.get(`/hobby-logs/${userId}/logs/week`, {
-        headers: {Authorization: `Bearer ${token}`}
-      });
-      setWeeklyLogs(response.data)
-    }
+      const response = await axiosInstance.get(
+        `/hobby-logs/${userId}/logs/week`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setWeeklyLogs(response.data);
+    };
     fetchWeeklyLogs();
-  }, [userId, token])
-  
-  const renderHeader = () => (<>
-      <LinearGradient colors={[COLORS.primary, COLORS.primaryLight, '#91EAE4']} style={styles.headerCard}>
+  }, [userId, token]);
+
+  const renderHeader = () => (
+    <>
+      <LinearGradient
+        colors={[COLORS.primary, COLORS.primaryLight, "#91EAE4"]}
+        style={styles.headerCard}
+      >
         <Text style={styles.header}>Welcome back!</Text>
         <Text style={styles.title}>Keep growing your hobbies 🌱</Text>
       </LinearGradient>
@@ -57,35 +62,37 @@ export default function UserScreen() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color="#7F7FD5" />
       </View>
     );
   }
 
   console.log(user);
-  
 
   return (
-   
-      
-
-      <FlatList
-        data={hobbies}
-        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-        ListHeaderComponent={renderHeader}
-        ListEmptyComponent={<Text style={{ textAlign: 'center', marginTop: 20 }}>No Hobbies Created</Text>}
-        contentContainerStyle={{ paddingBottom: 50, paddingHorizontal: 10, }}
-        renderItem={({ item }) => (
-          <TouchableOpacity
+    <FlatList
+      data={hobbies}
+      keyExtractor={(item, index) =>
+        item.id ? item.id.toString() : index.toString()
+      }
+      ListHeaderComponent={renderHeader}
+      ListEmptyComponent={
+        <Text style={{ textAlign: "center", marginTop: 20 }}>
+          No Hobbies Created
+        </Text>
+      }
+      contentContainerStyle={{ paddingBottom: 50, paddingHorizontal: 10 }}
+      renderItem={({ item }) => (
+        <TouchableOpacity
           onPress={() => {
-            if (typeof item.id === 'number') {
-              router.push({ 
-                pathname: "/hobby/[id]", 
-                params: { 
+            if (typeof item.id === "number") {
+              router.push({
+                pathname: "/hobby/[id]",
+                params: {
                   hobbyData: JSON.stringify(item),
                   id: item.id.toString(),
-                } 
+                },
               });
             }
           }}
@@ -93,33 +100,21 @@ export default function UserScreen() {
           <View style={styles.hobbyCard}>
             <Image
               source={
-                item.hobbyImage ? 
-                { uri: item.hobbyImage } : 
-                require('@/assets/images/hobbyImagePlaceHolder.png')
+                item.hobbyImage
+                  ? { uri: item.hobbyImage }
+                  : require("@/assets/images/hobbyImagePlaceHolder.png")
               }
               style={styles.hobbyImageCard}
             />
             <View style={styles.hobbyInfo}>
               <Text style={styles.hobbyName}>{item.name}</Text>
-              <View style={{ flexDirection: 'row', marginTop: 4, gap: 12 }}>
-                <Text style={styles.hobbyStats}>
-                  Level {item.level || 0}
-                </Text>
-                
+              <View style={{ flexDirection: "row", marginTop: 4, gap: 12 }}>
+                <Text style={styles.hobbyStats}>Level {item.level || 0}</Text>
               </View>
             </View>
           </View>
         </TouchableOpacity>
-        )}
-      >
-      
-      
-       
-      </FlatList>
-
-    
-   
+      )}
+    ></FlatList>
   );
-}  
-  
-  
+}
