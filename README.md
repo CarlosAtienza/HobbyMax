@@ -17,6 +17,16 @@ This repository contains the **frontend** built with React Native and Expo.
 
 ---
 
+## 📱 App Preview
+
+<p align="center">
+  <img src="screenshots/landing2.jpg" width="250"/>
+  <img src="screenshots/landing1.jpg" width="250"/>
+  <img src="screenshots/hobby1.jpg" width="250"/>
+</p>
+
+Track your hobbies, build daily habits, and level up your skills with a gamified experience.
+
 ## Tech Stack
 
 ### Frontend
