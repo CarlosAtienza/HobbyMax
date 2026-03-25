@@ -5,12 +5,12 @@
  * OpenAPI spec version: v0
  */
 
-export type ConnectionResponseDTOStatus = typeof ConnectionResponseDTOStatus[keyof typeof ConnectionResponseDTOStatus];
-
+export type ConnectionResponseDTOStatus =
+  (typeof ConnectionResponseDTOStatus)[keyof typeof ConnectionResponseDTOStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ConnectionResponseDTOStatus = {
-  PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED',
+  PENDING: "PENDING",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
 } as const;

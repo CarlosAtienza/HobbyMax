@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { HobbyRequestDTO } from './hobbyRequestDTO';
+import type { HobbyRequestDTO } from "./hobbyRequestDTO";
 
 export type CreateHobbyBody = {
   hobbyRequestDto?: HobbyRequestDTO;

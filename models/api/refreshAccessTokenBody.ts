@@ -5,4 +5,4 @@
  * OpenAPI spec version: v0
  */
 
-export type RefreshAccessTokenBody = {[key: string]: string};
+export type RefreshAccessTokenBody = { [key: string]: string };

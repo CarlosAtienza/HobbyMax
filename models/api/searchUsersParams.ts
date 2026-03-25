@@ -6,5 +6,5 @@
  */
 
 export type SearchUsersParams = {
-username: string;
+  username: string;
 };

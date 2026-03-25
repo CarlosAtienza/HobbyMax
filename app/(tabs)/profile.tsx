@@ -3,14 +3,20 @@ import { useAuthStore } from "@/stores/authStore";
 import { useHobbyStore } from "@/stores/hobbyStore";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Profile() {
   const router = useRouter();
   const hobbies = useHobbyStore((state) => state.hobbies);
 
   const { user, userId, token } = useAuthStore();
-
 
   if (!user) {
     return (
@@ -21,7 +27,10 @@ export default function Profile() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 50 }}
+    >
       {/* Header */}
       <View style={styles.header}>
         <Image
@@ -49,8 +58,6 @@ export default function Profile() {
         <Text style={styles.sectionText}>Total Hobbies: {hobbies.length}</Text>
         <Text style={styles.sectionText}>Current Streak: {4}</Text>
       </View>
-
-     
     </ScrollView>
   );
 }
@@ -124,5 +131,3 @@ export const styles = StyleSheet.create({
     marginTop: 50,
   },
 });
-
-

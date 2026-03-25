@@ -1,7 +1,7 @@
-import { COLORS } from '@/constants/theme';
-import { styles } from '@/styles/styles';
-import React, { useState } from 'react';
-import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { COLORS } from "@/constants/theme";
+import { styles } from "@/styles/styles";
+import React, { useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 interface HabitInputProps {
   habits: string[];
@@ -70,9 +70,7 @@ export default function HabitInput({ habits, setHabits }: HabitInputProps) {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: 15, color: COLORS.black }}>
-                {habit}
-              </Text>
+              <Text style={{ fontSize: 15, color: COLORS.black }}>{habit}</Text>
 
               <TouchableOpacity
                 onPress={() => deleteHabit(index)}

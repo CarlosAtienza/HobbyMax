@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { HobbyResponseDTO } from './hobbyResponseDTO';
+import type { HobbyResponseDTO } from "./hobbyResponseDTO";
 
 export interface UserResponseDTO {
   id?: number;

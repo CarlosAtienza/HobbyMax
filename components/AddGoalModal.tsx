@@ -1,16 +1,16 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface AddGoalModalProps {
   visible: boolean;
@@ -19,9 +19,14 @@ interface AddGoalModalProps {
   title?: string;
 }
 
-export default function AddGoalModal({ visible, onClose, onSubmit, title: modalTitle = 'Add New Goal' }: AddGoalModalProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+export default function AddGoalModal({
+  visible,
+  onClose,
+  onSubmit,
+  title: modalTitle = "Add New Goal",
+}: AddGoalModalProps) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
@@ -33,19 +38,19 @@ export default function AddGoalModal({ visible, onClose, onSubmit, title: modalT
     try {
       await onSubmit(title.trim(), description.trim());
       // Reset form
-      setTitle('');
-      setDescription('');
+      setTitle("");
+      setDescription("");
       onClose();
     } catch (error) {
-      console.error('Error adding goal:', error);
+      console.error("Error adding goal:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleClose = () => {
-    setTitle('');
-    setDescription('');
+    setTitle("");
+    setDescription("");
     onClose();
   };
 
@@ -57,7 +62,7 @@ export default function AddGoalModal({ visible, onClose, onSubmit, title: modalT
       onRequestClose={handleClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.modalOverlay}
       >
         <View style={styles.modalContent}>
@@ -109,7 +114,8 @@ export default function AddGoalModal({ visible, onClose, onSubmit, title: modalT
                 style={[
                   styles.button,
                   styles.submitButton,
-                  (!title.trim() || isSubmitting) && styles.submitButtonDisabled,
+                  (!title.trim() || isSubmitting) &&
+                    styles.submitButtonDisabled,
                 ]}
                 onPress={handleSubmit}
                 disabled={!title.trim() || isSubmitting}
@@ -131,28 +137,28 @@ export default function AddGoalModal({ visible, onClose, onSubmit, title: modalT
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingBottom: Platform.OS === 'ios' ? 40 : 20,
-    maxHeight: '80%',
+    paddingBottom: Platform.OS === "ios" ? 40 : 20,
+    maxHeight: "80%",
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   formContainer: {
     padding: 20,
@@ -162,25 +168,25 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    color: '#333',
-    backgroundColor: '#fff',
+    color: "#333",
+    backgroundColor: "#fff",
   },
   textArea: {
     height: 100,
     paddingTop: 12,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
     marginTop: 10,
   },
@@ -188,26 +194,26 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   cancelButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   cancelButtonText: {
-    color: '#666',
+    color: "#666",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   submitButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
   },
   submitButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

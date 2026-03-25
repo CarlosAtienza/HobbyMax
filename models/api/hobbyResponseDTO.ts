@@ -4,12 +4,13 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { HobbyLogResponseDTO } from './hobbyLogResponseDTO';
+import type { HobbyLogResponseDTO } from "./hobbyLogResponseDTO";
 
 export interface HobbyResponseDTO {
   id?: number;
   name?: string;
   totalXp?: number;
+  xpNeededToLevelUp?: number;
   level?: number;
   createdAt?: string;
   currentStreak?: number;

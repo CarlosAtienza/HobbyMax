@@ -5,17 +5,19 @@
  * OpenAPI spec version: v0
  */
 
-export * from './authResponseDTO';
-export * from './connectionRequestDTO';
-export * from './connectionResponseDTO';
-export * from './connectionResponseDTOStatus';
-export * from './createHobbyBody';
-export * from './hobbyLogRequestDTO';
-export * from './hobbyLogResponseDTO';
-export * from './hobbyRequestDTO';
-export * from './hobbyResponseDTO';
-export * from './loginRequest';
-export * from './refreshAccessTokenBody';
-export * from './registerBody';
-export * from './searchUsersParams';
-export * from './userResponseDTO';
+export * from "./authResponseDTO";
+export * from "./connectionRequestDTO";
+export * from "./connectionResponseDTO";
+export * from "./connectionResponseDTOStatus";
+export * from "./createHobbyBody";
+export * from "./hobbyLogRequestDTO";
+export * from "./hobbyLogResponseDTO";
+export * from "./hobbyRequestDTO";
+export * from "./hobbyResponseDTO";
+export * from "./hobbySummary";
+export * from "./insightDTO";
+export * from "./loginRequest";
+export * from "./refreshAccessTokenBody";
+export * from "./registerBody";
+export * from "./searchUsersParams";
+export * from "./userResponseDTO";

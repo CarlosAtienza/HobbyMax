@@ -14,4 +14,8 @@ export interface HobbyLogResponseDTO {
   completedGoals?: string[];
   message?: string;
   levelsProgressed?: number;
+  // Updated hobby state for instant level-up sync
+  updatedTotalXp?: number;
+  updatedXpNeededToLevelUp?: number;
+  updatedLevel?: number;
 }

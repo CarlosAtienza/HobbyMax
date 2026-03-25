@@ -1,8 +1,8 @@
-import { useHobbyLogStore } from '@/stores/hobbyLogStore';
-import { styles } from '@/styles/styles';
-import { addDays, format, isSameDay, startOfWeek } from 'date-fns';
-import React, { useState } from 'react';
-import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { useHobbyLogStore } from "@/stores/hobbyLogStore";
+import { styles } from "@/styles/styles";
+import { addDays, format, isSameDay, startOfWeek } from "date-fns";
+import React, { useState } from "react";
+import { FlatList, Modal, Text, TouchableOpacity, View } from "react-native";
 
 export default function CalendarWeek() {
   const { weeklyLogs } = useHobbyLogStore();
@@ -20,10 +20,12 @@ export default function CalendarWeek() {
   };
 
   const weeklyLogsForSelectedDate = weeklyLogs.filter(
-    (log) => format(new Date(log.date), 'yyyy-MM-dd') === format(selectedDate || new Date(), 'yyyy-MM-dd')
+    (log) =>
+      format(new Date(log.date), "yyyy-MM-dd") ===
+      format(selectedDate || new Date(), "yyyy-MM-dd"),
   );
 
-  console.log("Weekly Logs: ", weeklyLogs)
+  console.log("Weekly Logs: ", weeklyLogs);
 
   return (
     <View style={styles.calendarContainer}>
@@ -35,12 +37,12 @@ export default function CalendarWeek() {
             key={index}
             style={[
               styles.dayButton,
-              isSameDay(day, today) && styles.todayButton
+              isSameDay(day, today) && styles.todayButton,
             ]}
             onPress={() => handleDayPress(day)}
           >
-            <Text style={styles.dayLabel}>{format(day, 'EEE')}</Text>
-            <Text style={styles.dayNumber}>{format(day, 'd')}</Text>
+            <Text style={styles.dayLabel}>{format(day, "EEE")}</Text>
+            <Text style={styles.dayNumber}>{format(day, "d")}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -55,7 +57,8 @@ export default function CalendarWeek() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
-              Logs for {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : ''}
+              Logs for{" "}
+              {selectedDate ? format(selectedDate, "MMMM d, yyyy") : ""}
             </Text>
 
             {weeklyLogsForSelectedDate.length > 0 ? (

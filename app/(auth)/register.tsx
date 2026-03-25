@@ -2,11 +2,18 @@ import { COLORS } from "@/constants/theme";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/stores/authStore";
 import { styles } from "@/styles/styles";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Register() {
   const router = useRouter();
@@ -17,13 +24,15 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const { setTokens, userId, setUser } = useAuthStore();
-  
-  
 
   const pickImage = async () => {
-   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync(); 
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      Alert.alert("Permission Denied", "Permission to access media library is required!");
+      Alert.alert(
+        "Permission Denied",
+        "Permission to access media library is required!",
+      );
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -36,10 +45,7 @@ export default function Register() {
     if (!result.canceled) {
       setProfilePhoto(result.assets[0].uri);
     }
-
-  }
-
-  
+  };
 
   const handleRegister = async () => {
     if (password !== confirmPassword) {
@@ -49,12 +55,11 @@ export default function Register() {
 
     setLoading(true);
     try {
-      
       const formData = new FormData();
       formData.append("user", JSON.stringify({ username, email, password }));
 
       if (profilePhoto) {
-        const uriParts = profilePhoto.split('.');
+        const uriParts = profilePhoto.split(".");
         const fileType = uriParts[uriParts.length - 1];
 
         formData.append("profilePhoto", {
@@ -64,39 +69,32 @@ export default function Register() {
         } as any);
       }
 
-
       const response = await axiosInstance.post("/auth/register", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
       const { token, refreshToken, userId } = response.data;
-      
+
       //Fetching user data to store
       const userResponse = await axiosInstance.get(`/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}`},
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("Fetched User: ", userResponse.data.username);
 
-       //Save tokens and user data to store
-      await setTokens(
-        token,
-        refreshToken,
-      );
+      //Save tokens and user data to store
+      await setTokens(token, refreshToken);
 
       await setUser(userResponse.data, userId.toString());
 
-
       router.replace("/(tabs)");
-      
     } catch (error: any) {
       if (error.response?.status === 409) {
-        Alert.alert("Register Failed", error.response.data.error)
-      }
-      else {
-        Alert.alert("Register failed: ", error.message)
+        Alert.alert("Register Failed", error.response.data.error);
+      } else {
+        Alert.alert("Register failed: ", error.message);
       }
     } finally {
       setLoading(false);
@@ -104,19 +102,16 @@ export default function Register() {
   };
 
   return (
-    <LinearGradient colors={[COLORS.black, COLORS.primary]} style={styles.container}>
-  
+    <LinearGradient
+      colors={[COLORS.black, COLORS.primary]}
+      style={styles.container}
+    >
       <Text style={styles.title}>Register</Text>
 
-      <View
-        style={styles.avatarContainer}
-      >
+      <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={pickImage} style={styles.avatarPlaceholder}>
           {profilePhoto ? (
-            <Image 
-              source={{ uri: profilePhoto }}
-              style={styles.avatar}
-            />
+            <Image source={{ uri: profilePhoto }} style={styles.avatar} />
           ) : (
             <Text style={styles.avatarText}>Pick a Profile Photo</Text>
           )}
@@ -172,7 +167,6 @@ export default function Register() {
       >
         <Text style={styles.buttonText}>Back to Login</Text>
       </TouchableOpacity>
-    
     </LinearGradient>
   );
 }

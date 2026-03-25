@@ -1,13 +1,19 @@
-import { COLORS } from '@/constants/theme'
-import { HobbyLogResponseDTO } from '@/models/api/hobbyLogResponseDTO'
-import { useAuthStore } from '@/stores/authStore'
-import { useHobbyLogStore } from '@/stores/hobbyLogStore'
-import { useHobbyStore } from '@/stores/hobbyStore'
-import { styles } from '@/styles/styles'
-import React from 'react'
-import { Button, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { axiosInstance } from '../lib/axios'
-
+import { COLORS } from "@/constants/theme";
+import { HobbyLogResponseDTO } from "@/models/api/hobbyLogResponseDTO";
+import { useAuthStore } from "@/stores/authStore";
+import { useHobbyLogStore } from "@/stores/hobbyLogStore";
+import { useHobbyStore } from "@/stores/hobbyStore";
+import { styles } from "@/styles/styles";
+import React from "react";
+import {
+  Button,
+  Modal,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { axiosInstance } from "../lib/axios";
 
 interface HobbyLogListProps {
   hobbyId: number;
@@ -16,15 +22,13 @@ interface HobbyLogListProps {
 export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [successModalVisible, setSuccessModalVisible] = React.useState(false);
-  const [newDescription, setNewDescription] = React.useState('');
+  const [newDescription, setNewDescription] = React.useState("");
   const { token } = useAuthStore();
-  const {hobbies, setHobbies} = useHobbyStore();
-  const {hobbyLogs, setHobbyLogs, setWeeklyLogs, weeklyLogs} = useHobbyLogStore();
-  const [logResponse, setLogResponse] = React.useState<HobbyLogResponseDTO | null>(null);
-  
-
- 
-  
+  const { hobbies, setHobbies } = useHobbyStore();
+  const { hobbyLogs, setHobbyLogs, setWeeklyLogs, weeklyLogs } =
+    useHobbyLogStore();
+  const [logResponse, setLogResponse] =
+    React.useState<HobbyLogResponseDTO | null>(null);
 
   const handleCreateLog = async () => {
     if (newDescription) {
@@ -32,50 +36,59 @@ export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
         const formData = new FormData();
         formData.append("description", newDescription);
         formData.append("hobbyId", hobbyId.toString());
-      
-      
-      const response = await axiosInstance.post('/hobby-logs/create', formData, {
-        headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-         },
-      })
 
-     
-      setLogResponse(response.data);
+        const response = await axiosInstance.post(
+          "/hobby-logs/create",
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-      const updatedHobbies = hobbies.map(hobby => {
-        if (hobby.id === hobbyId) {
-          return {
-            ...hobby,
-            logs: [...(hobby.logs ?? []), response.data],
-          };
-        }
-        return hobby;
-      });
+        setLogResponse(response.data);
 
-      //Updating weekly logs
-      setWeeklyLogs([...(weeklyLogs), response.data]);
-      setHobbies(updatedHobbies);
+        const updatedHobbies = hobbies.map((hobby) => {
+          if (hobby.id === hobbyId) {
+            // Use updated values from backend for accurate level-up sync
+            return {
+              ...hobby,
+              totalXp: response.data.updatedTotalXp ?? hobby.totalXp,
+              level: response.data.updatedLevel ?? hobby.level,
+              xpNeededToLevelUp:
+                response.data.updatedXpNeededToLevelUp ?? hobby.xpNeededToLevelUp,
+              logs: [...(hobby.logs ?? []), response.data],
+            };
+          }
+          return hobby;
+        });
 
-      //Close create Modal and open success modal
-      setModalVisible(false);
-      setSuccessModalVisible(true);
-      setNewDescription('');
+        //Updating weekly logs
+        setWeeklyLogs([...weeklyLogs, response.data]);
+        setHobbies(updatedHobbies);
 
-    } catch (err) {
+        //Close create Modal and open success modal
+        setModalVisible(false);
+        setSuccessModalVisible(true);
+        setNewDescription("");
+      } catch (err) {
         console.error("Error creating hobby log:", err);
       }
-  }
-}
+    }
+  };
 
-
-
-
-   return (
-     <View style={{ paddingBottom: 20 }}>
+  return (
+    <View style={{ paddingBottom: 20 }}>
       {/* Create button */}
       <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <View style={[styles.hobbyCard, { justifyContent: 'center', alignItems: 'center' }]}>
+        <View
+          style={[
+            styles.hobbyCard,
+            { justifyContent: "center", alignItems: "center" },
+          ]}
+        >
           <Text style={styles.hobbyName}>+ Create New Log</Text>
         </View>
       </TouchableOpacity>
@@ -104,61 +117,87 @@ export default function HobbyLogList({ hobbyId }: HobbyLogListProps) {
               style={styles.descriptionInput}
               numberOfLines={5}
               multiline
-              textAlignVertical='top'
+              textAlignVertical="top"
             />
             <Button title="Create" onPress={handleCreateLog} />
-            <Button title="Cancel" color="red" onPress={() => setModalVisible(false)} />
+            <Button
+              title="Cancel"
+              color="red"
+              onPress={() => setModalVisible(false)}
+            />
           </View>
         </View>
       </Modal>
 
       {/* Success Modal */}
-      <Modal visible={successModalVisible} animationType="fade" transparent={true}>
+      <Modal
+        visible={successModalVisible}
+        animationType="fade"
+        transparent={true}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={[styles.sectionTitleBlack, { fontSize: 24, marginBottom: 20 }]}>
+            <Text
+              style={[
+                styles.sectionTitleBlack,
+                { fontSize: 24, marginBottom: 20 },
+              ]}
+            >
               🎉 Success!
             </Text>
-            
+
             {logResponse && (
               <>
                 {logResponse.message && (
-                  <Text style={styles.successMessage}>{logResponse.message}</Text>
+                  <Text style={styles.successMessage}>
+                    {logResponse.message}
+                  </Text>
                 )}
-                
+
                 <View style={{ marginVertical: 15 }}>
                   <Text style={styles.xpText}>
                     +{logResponse.xpEarned || 0} XP Earned
                   </Text>
                 </View>
 
-                {logResponse.leveledUp && (
-                  <Text style={styles.levelUpText}>🎊 Level Up! 🎊</Text>
-                )}
+                {logResponse.levelsProgressed !== undefined &&
+                  logResponse.levelsProgressed > 0 && (
+                    <Text style={styles.levelUpText}>🎊 Level Up! 🎊</Text>
+                  )}
 
-                {logResponse.completedGoals && logResponse.completedGoals.length > 0 && (
-                  <View style={{ marginTop: 10 }}>
-                    <Text style={{fontSize: 16, color: COLORS.primary, marginBottom: 5, fontWeight: '600' }}>Completed Goals:</Text>
-                    {logResponse.completedGoals.map((goal, idx) => (
-                      <Text key={idx} style={styles.goalText}>✓ {goal}</Text>
-                    ))}
-                  </View>
-                )}
+                {logResponse.completedGoals &&
+                  logResponse.completedGoals.length > 0 && (
+                    <View style={{ marginTop: 10 }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: COLORS.primary,
+                          marginBottom: 5,
+                          fontWeight: "600",
+                        }}
+                      >
+                        Completed Goals:
+                      </Text>
+                      {logResponse.completedGoals.map((goal, idx) => (
+                        <Text key={idx} style={styles.goalText}>
+                          ✓ {goal}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
               </>
             )}
-            
-            <Button 
-              title="Awesome!" 
+
+            <Button
+              title="Awesome!"
               onPress={() => {
                 setSuccessModalVisible(false);
                 setLogResponse(null);
-              }} 
+              }}
             />
           </View>
         </View>
       </Modal>
-
-
     </View>
   );
 }
